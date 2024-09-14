@@ -22,8 +22,6 @@ To install the package, use npm:
 ```
 ## Error List
 
-### Error Classes
-
 Here are the available error classes in the package:
 
 | Error Class            | HTTP Status Code | Description                                  |
