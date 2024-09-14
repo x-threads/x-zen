@@ -1,0 +1,25 @@
+{
+  "name": "express-http-error-handler",
+  "version": "1.0.1",
+  "main": "dist/index.js",
+ "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": ["express", "status error", "http error", "http"],
+  "author": "Andres Dvx",
+  "license": "MIT",
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "files": [                   
+  "dist",
+  "README.md"
+],
+  "description": "package helps you with http errors using express",
+  "devDependencies": {
+    "@types/node": "^22.5.5",
+    "typescript": "^5.6.2"
+  }
+}
