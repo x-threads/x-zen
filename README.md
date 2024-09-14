@@ -20,3 +20,14 @@ To install the package, use npm:
         return user;
     }
 ```
+## Error List
+
+### Error Classes
+
+Here are the available error classes in the package:
+
+| Error Class            | HTTP Status Code | Description                                  |
+|------------------------|------------------|----------------------------------------------|
+| `NotFoundError`        | 404              | Represents a 404 Not Found error             |
+| `BadRequestError`      | 400              | Represents a 400 Bad Request error           |
+| `InternalServerError`  | 500              | Represents a 500 Internal Server Error       |
