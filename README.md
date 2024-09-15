@@ -9,6 +9,7 @@ To install the package, use npm:
 ```bash
     npm install express-http-error-handler
 ```
+
 ## Usage
 
 ### NotFoundError
@@ -23,6 +24,16 @@ To install the package, use npm:
     }
 ```
 
+### Response
+
+```json
+    {
+        "statusCode": 404,
+        "errorMessage": "User not found with id 4",
+        "name": "Not Found Error"
+    }
+```
+
 ### BadRequestError
 
 ```typescript
@@ -33,6 +44,18 @@ To install the package, use npm:
         return await this.prismaService.user.create({ data });
     }
 ```
+
+### Response
+
+```json
+    {
+        "statusCode": 400,
+        "errorMessage": "Email is required",
+        "name": "Bad Request Error"
+    }
+```
+
+
 ### InternalServerError
 
 ```typescript
@@ -44,6 +67,16 @@ To install the package, use npm:
         } catch (err) {
             throw new InternalServerError('Payment processing failed');
         }
+    }
+```
+
+### Response
+
+```json
+    {
+        "statusCode": 500,
+        "errorMessage": "Payment processing failed",
+        "name": "Internal Server Error"
     }
 ```
 
@@ -59,48 +92,33 @@ To install the package, use npm:
     }
 ```
 
+### Response
+
+```json
+    {
+        "statusCode": 401,
+        "errorMessage": "Invalid token",
+        "name": "UnauthorizedError"
+    }
+```
+
 ### ForbiddenError
 
 ```typescript
-import { ForbiddenError } from 'express-http-error-handler';
+    import { ForbiddenError } from 'express-http-error-handler';
 
-   async function accessAdminPanel(user: User): Promise<void> {
+    async function accessAdminPanel(user: User): Promise<void> {
         if (user.role !== 'admin') throw new ForbiddenError('Access denied: Admins only');
         // Proceed with providing access to the admin panel
-   }
+    }
 ```
-
-## Responses
+### Response 
 
 ```json
     {
         "statusCode": 403,
-        "errorMessage": "Forbidden Error",
+        "errorMessage": "Access denied: Admins only",
         "name": "ForbiddenError"
-    }
-
-    {
-        "statusCode": 401,
-        "errorMessage": "Unauthorized Error",
-        "name": "UnauthorizedError"
-    }
-
-    {
-        "statusCode": 404,
-        "errorMessage": "User with id 1 was not found",
-        "name": "Not Found Error"
-    }
-
-    {
-        "statusCode": 500,
-        "errorMessage": "Internal server Error",
-        "name": "Internal Server Error"
-    }
-
-    {
-        "statusCode": 400,
-        "errorMessage": "An user with id 3 aleady exists",
-        "name": "Bad Request Error"
     }
 ```
 
