@@ -72,11 +72,35 @@ import { ForbiddenError } from 'express-http-error-handler';
 
 ## Responses
 
-```typescript
+```json
     {
-      "statusCode": 403,
-      "errorMessage": "Forbidden Error",
-      "name": "ForbiddenError"
+        "statusCode": 403,
+        "errorMessage": "Forbidden Error",
+        "name": "ForbiddenError"
+    }
+
+    {
+        "statusCode": 401,
+        "errorMessage": "Unauthorized Error",
+        "name": "UnauthorizedError"
+    }
+
+    {
+        "statusCode": 404,
+        "errorMessage": "User with id 1 was not found",
+        "name": "Not Found Error"
+    }
+
+    {
+        "statusCode": 500,
+        "errorMessage": "Internal server Error",
+        "name": "Internal Server Error"
+    }
+
+    {
+        "statusCode": 400,
+        "errorMessage": "An user with id 3 aleady exists",
+        "name": "Bad Request Error"
     }
 ```
 
