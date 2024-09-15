@@ -11,15 +11,65 @@ To install the package, use npm:
 ```
 ## Usage
 
-```bash
+### NotFoundError
+
+```typescript
     import { NotFoundError} from 'express-http-error-handler';
 
-    async function getBookById(id: string): Promise<User | null> {
+    async function getUserById(id: string): Promise<User | null> {
         const user = await this.prismaService.user.findUnique({ where: { id } });
         if (!user) throw new NotFoundError(`User not found with id ${id}`);
         return user;
     }
 ```
+
+### BadRequestError
+
+```typescript
+    import { BadRequestError } from 'express-http-error-handler';
+
+    async function createUser(data: any): Promise<User> {
+        if (!data.email) throw new BadRequestError('Email is required');
+        return await this.prismaService.user.create({ data });
+    }
+```
+### InternalServerError
+
+```typescript
+    import { InternalServerError } from 'express-http-error-handler';
+
+    async function processPayment(paymentData: any): Promise<void> {
+        try {
+            // Process payment logic
+        } catch (err) {
+            throw new InternalServerError('Payment processing failed');
+        }
+    }
+```
+
+### UnauthorizedError
+
+```typescript
+    import { UnauthorizedError } from 'express-http-error-handler';
+
+    async function getUserProfile(token: string): Promise<User> {
+        const user = await this.authService.validateToken(token);
+        if (!user) throw new UnauthorizedError('Invalid token');
+        return user;
+    }
+```
+
+### ForbiddenError
+
+```typescript
+import { ForbiddenError } from 'express-http-error-handler';
+
+   async function accessAdminPanel(user: User): Promise<void> {
+        if (user.role !== 'admin') throw new ForbiddenError('Access denied: Admins only');
+        // Proceed with providing access to the admin panel
+   }
+```
+
 ## Error List
 
 Here are the available error classes in the package:
@@ -29,3 +79,5 @@ Here are the available error classes in the package:
 | `NotFoundError`        | 404              | Represents a 404 Not Found error             |
 | `BadRequestError`      | 400              | Represents a 400 Bad Request error           |
 | `InternalServerError`  | 500              | Represents a 500 Internal Server Error       |
+| `UnauthorizedError`    | 401              | Represents a 401 Unauthorized error          |
+| `ForbiddenError`       | 403              | Represents a 403 Forbidden error             |
