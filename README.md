@@ -70,6 +70,16 @@ import { ForbiddenError } from 'express-http-error-handler';
    }
 ```
 
+## Responses
+
+```typescript
+    {
+      "statusCode": 403,
+      "errorMessage": "Forbidden Error",
+      "name": "ForbiddenError"
+    }
+```
+
 ## Error List
 
 Here are the available error classes in the package:
