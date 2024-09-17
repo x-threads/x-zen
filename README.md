@@ -48,6 +48,7 @@ In the controller, we handle the request by catching the error and returning a p
 
 ```typescript
     import { Request, Response } from 'express';
+    import {HttpError} from 'express-http-error-handler'
 
     async getUserById(req : Request, res : Response){
         try{
@@ -88,6 +89,7 @@ In the controller, we handle the request by catching the error and returning a p
 
 ```typescript
     import { Request, Response } from 'express';
+    import {HttpError} from 'express-http-error-handler'
 
     async createUserController(req: Request, res: Response) {
         try {
@@ -128,6 +130,7 @@ In this example, we are processing a payment. If something goes wrong during the
 
 ```typescript
     import { Request, Response } from 'express';
+    import {HttpError} from 'express-http-error-handler'
 
     async processPaymentController(req: Request, res: Response) {
         try {
@@ -168,6 +171,7 @@ In the controller, we handle the request by catching the error and returning a p
 
 ```typescript
     import { Request, Response } from 'express';
+    import {HttpError} from 'express-http-error-handler'
 
     async getUserProfileController(req: Request, res: Response) {
         try {
@@ -206,6 +210,8 @@ In the controller, we handle the request by catching the error and returning a p
 
 ```typescript
     import { Request, Response } from 'express';
+    import {HttpError} from 'express-http-error-handler'
+
     async accessAdminPanelController(req: Request, res: Response) {
         try {
             await this.adminService.accessAdminPanelService(req.user);
