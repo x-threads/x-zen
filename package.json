@@ -1,12 +1,17 @@
 {
   "name": "express-http-error-handler",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "main": "dist/index.js",
- "types": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc"
   },
-  "keywords": ["express", "status error", "http error", "http"],
+  "keywords": [
+    "express",
+    "status error",
+    "http error",
+    "http"
+  ],
   "author": "Andres Dvx",
   "license": "MIT",
   "repository": {
@@ -14,11 +19,11 @@
     "url": "https://github.com/andresdvx/express-http-error-handler"
   },
   "homepage": "https://github.com/andresdvx/express-http-error-handler#readme",
-  "files": [                   
-  "dist",
-  "README.md"
-],
-  "description": "package helps you with http errors using express",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "description": "A lightweight package that simplifies handling and throwing HTTP errors in Express applications, providing clear and structured error responses.",
   "devDependencies": {
     "@types/node": "^22.5.5",
     "typescript": "^5.6.2"
