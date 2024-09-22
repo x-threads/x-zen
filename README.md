@@ -55,10 +55,6 @@ export class UserService{
         if(!user) throw new NotFoundError(`user not found with id ${id}`);
         return user;
     }
-
-    async createUser(data : User){
-    
-    }
 }
 
 ```
