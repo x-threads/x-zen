@@ -1,6 +1,6 @@
 {
   "name": "express-http-error-handler",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -23,7 +23,7 @@
     "dist",
     "README.md"
   ],
-  "description": "A lightweight package that simplifies handling and throwing HTTP errors in Express applications, providing clear and structured error responses.",
+  "description": "A lightweight package that simplifies handling and throwing HTTP errors in Express applications.",
   "devDependencies": {
     "@types/node": "^22.5.5",
     "typescript": "^5.6.2"

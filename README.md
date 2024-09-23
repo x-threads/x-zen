@@ -2,13 +2,21 @@
 
 `express-http-error-handler` is a package for handling HTTP errors in Express applications in a simple and efficient way. It provides specific error classes for the most common HTTP status codes.
 
-## Installation
+## Installation and configuration
 
 To install the package, use npm:
 
 ```bash
 npm install express-http-error-handler
 ```
+
+Now we have to enable these options in our tsconfig.json para poder utilizar decoradores en typescript.
+
+```json
+"experimentalDecorators": true,
+"emitDecoratorMetadata": true,  
+```
+
 
 ## Error List
 
