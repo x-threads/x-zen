@@ -21,10 +21,10 @@ export function ResMethod() {
   return function (target: any,propertyKey: string,descriptor: PropertyDescriptor): void {
     const originalMethod = descriptor.value;
 
-    descriptor.value = function (...args: any[]) {
+    descriptor.value = async function (...args: any[]) {
       const res = args.find((arg) =>arg &&typeof arg.status === "function" &&typeof arg.json === "function");
       try {
-        return originalMethod.apply(this, args);
+        return await originalMethod.apply(this, args);
       } catch (error: any) {
         if (res) {
           return error instanceof HttpError
