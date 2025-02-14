@@ -10,7 +10,7 @@ To install the package, use npm:
 npm install express-http-error-handler
 ```
 
-Now we have to enable these options in our tsconfig.json para poder utilizar decoradores en typescript.
+Now we have to enable these options in our tsconfig.json to be able to use decorators in typescript..
 
 ```json
 "experimentalDecorators": true,
