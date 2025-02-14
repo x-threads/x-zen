@@ -18,23 +18,31 @@ import { HttpError } from './httpError'
  * The decorator ensures that exceptions from the method are caught and handled properly.
  */
 export function ResMethod() {
-  return function (target: any,propertyKey: string,descriptor: PropertyDescriptor): void {
+  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor): void {
     const originalMethod = descriptor.value;
 
-    descriptor.value = async function (...args: any[]) {
-      const res = args.find((arg) =>arg &&typeof arg.status === "function" &&typeof arg.json === "function");
+    descriptor.value = function (...args: any[]) {
+      const res = args.find((arg) => arg && typeof arg.status === "function" && typeof arg.json === "function");
       try {
-        return await originalMethod.apply(this, args);
-      } catch (error: any) {
-        if (res) {
-          return error instanceof HttpError
-            ? res.status(error.statusCode).json(error)
-            : res.status(500).json({ message: "Internal Server Error", error : error.message });
-        } else {
-          throw error;
+        const result = originalMethod.apply(this, args);
+        if (result instanceof Promise) {
+          return result.catch((error: any) => handleError(res, error));
         }
+        return result;
+      } catch (error: any) {
+        return handleError(res, error);
       }
     };
   };
+}
+
+function handleError(res: any, error: any) {
+  if (res) {
+    return error instanceof HttpError
+      ? res.status(error.statusCode).json(error)
+      : res.status(500).json({ message: "Internal Server Error", error: error.message });
+  } else {
+    throw error;
+  }
 }
 
