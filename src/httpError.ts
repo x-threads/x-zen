@@ -11,7 +11,9 @@ export class HttpError extends Error {
     super(errorMessage || 'Error not especified');
     this.name = this.constructor.name;
     this.statusCode = statusCode;
-    Error.captureStackTrace(this, this.constructor);
+    if ((Error as any).captureStackTrace) {
+      (Error as any).captureStackTrace(this, this.constructor);
+    }
   }
 }
 
