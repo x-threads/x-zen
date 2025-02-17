@@ -1,6 +1,6 @@
 {
-  "name": "express-flow",
-  "version": "1.1.1",
+  "name": "express-zen",
+  "version": "1.1.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -17,9 +17,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/andresdvx/express-flow"
+    "url": "https://github.com/andresdvx/express-zen"
   },
-  "homepage": "https://github.com/andresdvx/express-flow#readme",
+  "homepage": "https://github.com/andresdvx/express-zen#readme",
   "files": [
     "dist",
     "README.md"
