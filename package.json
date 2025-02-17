@@ -1,6 +1,6 @@
 {
-  "name": "express-http-handler",
-  "version": "1.1.0",
+  "name": "express-flow",
+  "version": "1.1.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -17,9 +17,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/andresdvx/express-http-handler"
+    "url": "https://github.com/andresdvx/express-flow"
   },
-  "homepage": "https://github.com/andresdvx/express-http-handler#readme",
+  "homepage": "https://github.com/andresdvx/express-flow#readme",
   "files": [
     "dist",
     "README.md"
