@@ -1,13 +1,13 @@
 # express-zen
 
-`express-http-error-handler` is a package for handling HTTP errors in Express applications in a simple and efficient way. It provides specific error classes for the most common HTTP status codes.
+`express-zen` is a package for handling HTTP errors in Express applications in a simple and efficient way. It provides specific error classes for the most common HTTP status codes.
 
 ## Installation and configuration
 
 To install the package, use npm:
 
 ```bash
-npm install express-http-error-handler
+npm install express-zen
 ```
 
 Now we have to enable these options in our tsconfig.json to be able to use decorators in typescript..
@@ -52,7 +52,7 @@ we created our basic methods
 `UserService.ts`
 
 ```typescript
-import { NotFoundError} from 'express-http-error-handler';
+import { NotFoundError} from 'express-zen';
 
 export class UserService{
 
@@ -77,7 +77,7 @@ we can use the decorator provided by express-http-error-handler, which helps us 
 
 ```typescript
 import { Request, Response } from 'express';
-import { ResMethod } from 'express-http-error-handler';
+import { ResMethod } from 'express-zen';
 
 export class UserController{
 
@@ -87,7 +87,7 @@ export class UserController{
     async getUserById(req : Request, res : Response){
         const {id} = req.params;
         const user = await userService.getUserById(id);
-        return res.status(200).json(user);
+        return user;
     }
 }
 
@@ -98,11 +98,7 @@ In this case, we throw a NotFoundError (status code 400) from our service, using
 
 **The response client receives looks like this:**
 
-
-![alt text](https://res.cloudinary.com/dct54aary/image/upload/v1726602949/image_uqt1ol.png)
-
 ---
-
 
 ### Example using `javascript`
 
@@ -113,7 +109,7 @@ As we know in pure JavaScript, decorators are not natively supported, so we can 
 
 ```javascript
 import { Request, Response } from 'express';
-import { HttpError } from 'express-http-error-handler';
+import { HttpErrors } from 'express-zen';
 
 export class UserController{
 
@@ -125,8 +121,8 @@ export class UserController{
         const user = await userService.getUserById(id);
         return res.status(200).json(user);
        }catch(error : any){
-        return error instanceof HttpError
-        ? res.status(error.statusCode).json(error)
+        return error instanceof HttpErrors
+        ? res.status(error.status).json(error)
         : res.status(500).json(error);
        }
     }
@@ -136,9 +132,6 @@ export class UserController{
 `Response`
 
 the answer ends up being the same, the difference is that now we must validate the instance the error to know if it is of type **HttpError**
-
-![alt text](https://res.cloudinary.com/dct54aary/image/upload/v1726602949/image_uqt1ol.png)
-
 
 
 **In this way we can use and thorw errors in express, either from services, middlewares or other validations.**
