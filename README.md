@@ -1,4 +1,4 @@
-# express-http-error-handler
+# express-zen
 
 `express-http-error-handler` is a package for handling HTTP errors in Express applications in a simple and efficient way. It provides specific error classes for the most common HTTP status codes.
 
