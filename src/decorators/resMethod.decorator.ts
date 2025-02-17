@@ -1,4 +1,5 @@
-import { HttpError } from './httpError'
+import { ResponseHandler } from "../handlers/response.handler";
+import { ErrorHandler } from "../handlers/error.handler";
 
 /**
  * This decorator is designed to be used on controller methods to automatically handle and validate thrown exceptions.
@@ -18,31 +19,19 @@ import { HttpError } from './httpError'
  * The decorator ensures that exceptions from the method are caught and handled properly.
  */
 export function ResMethod() {
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor): void {
+  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {
-      const res = args.find((arg) => arg && typeof arg.status === "function" && typeof arg.json === "function");
+      const res: Response = args[1]; 
       try {
-        const result = originalMethod.apply(this, args);
-        if (result instanceof Promise) {
-          return result.catch((error: any) => handleError(res, error));
-        }
-        return result;
-      } catch (error: any) {
-        return handleError(res, error);
+        const result = await originalMethod.apply(this, args);
+        ResponseHandler(res, { status: 200, message: "success", data: result });
+      } catch (error) {
+        ErrorHandler(error, res);
       }
     };
+
+    return descriptor;
   };
 }
-
-function handleError(res: any, error: any) {
-  if (res) {
-    return error instanceof HttpError
-      ? res.status(error.statusCode).json(error)
-      : res.status(500).json({ message: "Internal Server Error", error: error.message });
-  } else {
-    throw error;
-  }
-}
-

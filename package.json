@@ -1,6 +1,6 @@
 {
-  "name": "express-http-error-handler",
-  "version": "1.0.18",
+  "name": "express-http-handler",
+  "version": "1.1.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -17,9 +17,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/andresdvx/express-http-error-handler"
+    "url": "https://github.com/andresdvx/express-http-handler"
   },
-  "homepage": "https://github.com/andresdvx/express-http-error-handler#readme",
+  "homepage": "https://github.com/andresdvx/express-http-handler#readme",
   "files": [
     "dist",
     "README.md"
