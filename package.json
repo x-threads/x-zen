@@ -1,11 +1,12 @@
 {
   "name": "x-zen-new",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "deploy": "git add . && git commit -m \"$1\" && git push && npm run build && npm publish",
-    "build": "tsc"
+    "build": "tsc",
+    "deploy": "git add . && git commit -m \"Release new version\" && git push && npm run build && npm publish --access public"
   },
   "keywords": [
     "express",
