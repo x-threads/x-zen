@@ -1,13 +1,13 @@
-# @express-zen
+# x-zen
 
-`@express-zen` is a package for handling HTTP errors in Express applications in a simple and efficient way. It provides specific error classes for the most common HTTP statusCode codes.
+`x-zen` is a package for handling HTTP errors in Express applications in a simple and efficient way. It provides specific error classes for the most common HTTP statusCode codes.
 
 ## Installation and Configuration
 
 To install the package, use npm:
 
 ```bash
-npm install @express-zen
+npm install x-zen
 ```
 
 Now we have to enable these options in our `tsconfig.json` to be able to use decorators in TypeScript:
@@ -37,7 +37,8 @@ Here are the responses the client receives when an error is thrown:
 ```json
 {
   "statusCode": 404,
-  "errorMessage": "Not Found Error"
+  "errorMessage": "Not Found Error",
+  "error" : "Not Found"
 }
 ```
 
@@ -45,7 +46,8 @@ Here are the responses the client receives when an error is thrown:
 ```json
 {
   "statusCode": 400,
-  "errorMessage": "Bad Request Error"
+  "errorMessage": "Bad Request Error",
+  "error" : "Bad Request"
 }
 ```
 
@@ -53,7 +55,8 @@ Here are the responses the client receives when an error is thrown:
 ```json
 {
   "statusCode": 500,
-  "errorMessage": "Internal Server Error"
+  "errorMessage": "Internal Server Error",
+  "error" : "Internal Server Error"
 }
 ```
 
@@ -61,7 +64,8 @@ Here are the responses the client receives when an error is thrown:
 ```json
 {
   "statusCode": 401,
-  "errorMessage": "Unauthorized Error"
+  "errorMessage": "Unauthorized Error",
+  "error" : "Unauthorized"
 }
 ```
 
@@ -69,7 +73,8 @@ Here are the responses the client receives when an error is thrown:
 ```json
 {
   "statusCode": 403,
-  "errorMessage": "Forbidden Error"
+  "errorMessage": "Forbidden Error",
+  "error" : "Forbidden"
 }
 ```
 
@@ -86,7 +91,7 @@ These are some of the decorators provided at the moment:
 ### Example: `UserService.ts`
 
 ```typescript
-import { NotFoundError } from '@express-zen';
+import { NotFoundError } from 'x-zen';
 
 export class UserService {
   constructor() {}
@@ -103,7 +108,7 @@ export class UserService {
 
 ```typescript
 import { Request, Response } from 'express';
-import { ResMethod } from '@express-zen';
+import { ResMethod } from 'x-zen';
 import { UserService } from './UserService';
 
 const userService = new UserService();
@@ -124,7 +129,8 @@ If `NotFoundError` is thrown, the client will receive:
 ```json
 {
   "statusCode": 404,
-  "errorMessage": "User not found with ID {id}"
+  "errorMessage": "User not found with ID {id}",
+  "error" : "Not Found"
 }
 ```
 
@@ -136,7 +142,7 @@ In JavaScript, since decorators are not natively supported, we handle errors usi
 
 ```javascript
 import { Request, Response } from 'express';
-import { HttpErrors } from '@express-zen';
+import { HttpErrors } from 'x-zen';
 import { UserService } from './UserService';
 
 const userService = new UserService();
@@ -164,11 +170,12 @@ If `NotFoundError` is thrown, the client will receive:
 ```json
 {
   "statusCode": 404,
-  "errorMessage": "User not found with ID {id}"
+  "errorMessage": "User not found with ID {id}",
+  "error" : "Not Found"
 }
 ```
 
 ## Summary
 
-With `@express-zen`, you can easily handle HTTP errors in Express applications using decorators in TypeScript or a standard try-catch approach in JavaScript. This ensures clean, maintainable, and efficient error handling.
+With `x-zen`, you can easily handle HTTP errors in Express applications using decorators in TypeScript or a standard try-catch approach in JavaScript. This ensures clean, maintainable, and efficient error handling.
 
