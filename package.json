@@ -1,6 +1,6 @@
 {
-  "name": "@express/zen",
-  "version": "1.1.4",
+  "name": "@x/zen",
+  "version": "1.1.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -17,9 +17,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/andresdvx/express-zen"
+    "url": "https://github.com/andresdvx/x-zen"
   },
-  "homepage": "https://github.com/andresdvx/express-zen#readme",
+  "homepage": "https://github.com/andresdvx/x-zen#readme",
   "files": [
     "dist",
     "README.md"
