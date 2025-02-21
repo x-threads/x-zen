@@ -1,6 +1,6 @@
 {
   "name": "x-zen-new",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -27,22 +27,11 @@
   ],
   "description": "A lightweight package that simplifies handling and throwing HTTP errors in Express applications.",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./decorators": {
-      "import": "./dist/decorators/index.js",
-      "types": "./dist/decorators/index.d.ts"
-    },
-    "./handlers": {
-      "import": "./dist/handlers/index.js",
-      "types": "./dist/handlers/index.d.ts"
-    },
-    "./errors": {
-      "import": "./dist/errors/index.js",
-      "types": "./dist/errors/index.d.ts"
-    }
+   ".": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  }
   },
   "devDependencies": {
     "@types/node": "^22.5.5",
