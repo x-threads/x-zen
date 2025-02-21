@@ -1,13 +1,10 @@
 
 interface ResponseData {
-  status: number;
+  statusCode: number;
   message?: string;
   data?: any;
 }
 
-export function ResponseHandler(
-  res: any,
-  { status, message = "", data = null }: ResponseData
-) {
-  return res.status(status).json({ status, error: false, message, data });
+export function ResponseHandler(res: any,{ statusCode, message = "", data = null }: ResponseData) {
+  return res.status(statusCode).json({ statusCode, error: false, message, data });
 }

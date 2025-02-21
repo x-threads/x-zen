@@ -1,4 +1,3 @@
-export * from './httpErrors'
-export * from './decorators/resMethod.decorator'
-export * from './handlers/error.handler'
-export * from './handlers/response.handler'
+export * from './errors/index'
+export * from './decorators/index'
+export * from './handlers/index'

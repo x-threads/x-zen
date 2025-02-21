@@ -4,13 +4,14 @@
  * This class is used as a base for specific HTTP errors, encapsulating an error message and a status code.
  * 
  * @param {string} [errorMessage] - The error message describing the issue.
- * @param {number} statusCode - The HTTP status code associated with the error.
+ * @param {number} [statusCode] - The HTTP status code associated with the error.
+ * @param {string} [error] - The HTTP status code associated with the error.
  */
 export class HttpErrors extends Error {
-  constructor(public status: number, public errorMessage: string) {
+  constructor(public statusCode: number, public errorMessage: string, error : string) {
     super(errorMessage || 'Error not especified');
     this.name = this.constructor.name;
-    this.status = status;
+    this.statusCode = statusCode;
     if ((Error as any).captureStackTrace) {
       (Error as any).captureStackTrace(this, this.constructor);
     }
@@ -26,7 +27,7 @@ export class HttpErrors extends Error {
 */
 export class NotFoundError extends HttpErrors {
   constructor( errorMessage : string = "Not found Error") {
-    super(404, errorMessage);
+    super(404, errorMessage, 'Not Found');
   }
 }
 
@@ -39,7 +40,7 @@ export class NotFoundError extends HttpErrors {
 */
 export class BadRequestError extends HttpErrors {
   constructor( errorMessage : string = "Bad Request Error") {
-    super(400, errorMessage);
+    super(400, errorMessage, 'Bad Request');
   }
 }
 
@@ -52,7 +53,7 @@ export class BadRequestError extends HttpErrors {
  */
 export class InternalServerError extends HttpErrors {
   constructor(errorMessage: string = 'Internal server Error') {
-    super(500, errorMessage);
+    super(500, errorMessage, 'Internal Server Error');
   }
 }
 
@@ -65,7 +66,7 @@ export class InternalServerError extends HttpErrors {
  */
 export class UnauthorizedError extends HttpErrors {
   constructor(errorMessage = 'Unauthorized Error') {
-    super(401, errorMessage);
+    super(401, errorMessage, 'Unauthorized');
   }
 }
 
@@ -78,6 +79,6 @@ export class UnauthorizedError extends HttpErrors {
  */
 export class ForbiddenError extends HttpErrors {
   constructor(errorMessage = 'Forbidden Error') {
-    super(403, errorMessage);
+    super(403, errorMessage, 'Forbidden');
   }
 }
