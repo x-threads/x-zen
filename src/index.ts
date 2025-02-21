@@ -1,3 +1,3 @@
-export * from './errors/index'
-export * from './decorators/index'
-export * from './handlers/index'
+export * from "./errors";
+export * from "./decorators";
+export * from "./handlers";
