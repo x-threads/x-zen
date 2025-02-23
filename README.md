@@ -121,7 +121,8 @@ export class UserController {
   @ResMethod()
   async getUserById(req: Request, res: Response) {
     const { id } = req.params;
-    return await userService.getUserById(id);
+    const foundUser = await userService.getUserById(id);
+    return foundUser;
   }
 }
 ```
