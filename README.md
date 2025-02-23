@@ -1,6 +1,8 @@
 # x-zen
 
-`x-zen` is a package for handling HTTP errors in Express applications in a simple and efficient way. It provides specific error classes for the most common HTTP statusCode codes.
+`x-zen` is a package to manage and handle HTTP responses and errors in Express applications in a simple and efficient way. It provides specific error classes for the most common HTTP codes.
+
+It also handles http responses in a very simple way.
 
 ## Installation and Configuration
 
@@ -84,7 +86,7 @@ These are some of the decorators provided at the moment:
 
 | Decorator    | Description                                                                |
 | ------------ | -------------------------------------------------------------------------- |
-| `ResMethod`  | Handles and validates the errors thrown and returns them to the client.   |
+| `ResMethod`  | handles and validates the generated HTTP errors, processes the responses and sends them to the client appropriately.  |
 
 ## Using the Package with TypeScript
 
@@ -165,17 +167,6 @@ export class UserController {
 }
 ```
 
-### Example Response
-If `NotFoundError` is thrown, the client will receive:
-```json
-{
-  "statusCode": 404,
-  "errorMessage": "User not found with ID {id}",
-  "error" : "Not Found"
-}
-```
-
 ## Summary
 
-With `x-zen`, you can easily handle HTTP errors in Express applications using decorators in TypeScript or a standard try-catch approach in JavaScript. This ensures clean, maintainable, and efficient error handling.
-
+With `x-zen`, you can handle errors and HTTP responses in Express applications easily, either using decorators in TypeScript or a standard approach with `try-catch` in JavaScript. This ensures clear, efficient and easy-to-maintain error handling.
