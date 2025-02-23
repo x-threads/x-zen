@@ -1,6 +1,6 @@
 {
-  "name": "x-zen-new",
-  "version": "1.0.4",
+  "name": "x-zen",
+  "version": "1.0.5",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,7 +25,7 @@
     "dist",
     "README.md"
   ],
-  "description": "A lightweight package that simplifies handling and throwing HTTP errors in Express applications.",
+  "description": "A lightweight package that simplifies the handling of HTTP responses and errors in Express applications.",
   "exports": {
    ".": {
     "require": "./dist/index.js",
