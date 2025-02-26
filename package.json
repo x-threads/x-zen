@@ -1,6 +1,6 @@
 {
   "name": "x-zen",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,9 +18,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/andresdvx/x-zen"
+    "url": "https://github.com/x-thread/x-zen.git"
   },
-  "homepage": "https://github.com/andresdvx/x-zen#readme",
+  "homepage": "https://github.com/x-thread/x-zen.git#readme",
   "files": [
     "dist",
     "README.md"
