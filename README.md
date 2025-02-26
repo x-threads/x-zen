@@ -11,8 +11,8 @@ To install the package, use npm:
 ```bash
 npm install x-zen
 ```
-
-Now we have to enable these options in our `tsconfig.json` to be able to use decorators in TypeScript:
+>[!IMPORTANT]
+>Now we have to enable these options in our `tsconfig.json` to be able to use decorators in TypeScript:
 
 ```json
 "experimentalDecorators": true,
