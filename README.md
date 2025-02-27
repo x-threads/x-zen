@@ -118,7 +118,7 @@ const userService = new UserService();
 export class UserController {
   constructor() {}
 
-  @ResMethod(200)
+  @ResMethod({ statusCode: 200, message: "User Was Found" })
   async getUserById(req: Request, res: Response) {
     const { id } = req.params;
     const foundUser = await userService.getUserById(id);
@@ -129,6 +129,26 @@ export class UserController {
 
 ### In case of success
 If the operation is successful, this is what the response looks like:
+```json
+{
+  "statusCode": 200,
+  "error": false,
+  "message": "User Was Found",
+  "data": {
+    "user": {
+      "id" : "xxxxxx",
+      "name": "John",
+      "lastName": "Doe",
+      "email": "JohnDoe@mail.com"
+    }
+  }
+}
+```
+
+>[!TIP]
+>you can omit the decorator parameters and the default values will be sent
+### With default values
+
 ```json
 {
   "statusCode": 200,
