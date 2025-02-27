@@ -18,7 +18,7 @@ import { ErrorHandler } from "../handlers/error.handler";
  * 
  * The decorator ensures that exceptions from the method are caught and handled properly.
  */
-export function ResMethod() {
+export function ResMethod(statusCode : 200 | 201 = 200) {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
 
@@ -26,7 +26,7 @@ export function ResMethod() {
       const res: Response = args[1]; 
       try {
         const result = await originalMethod.apply(this, args);
-        ResponseHandler(res, { statusCode: 200, message: "success", data: result });
+        ResponseHandler(res, { statusCode, message: "success", data: result });
       } catch (error) {
         ErrorHandler(error, res);
       }
