@@ -84,9 +84,9 @@ Here are the responses the client receives when an error is thrown:
 
 These are some of the decorators provided at the moment:
 
-| Decorator    | Description                                                                |
-| ------------ | -------------------------------------------------------------------------- |
-| `ResMethod`  | handles and validates the generated HTTP errors, processes the responses and sends them to the client appropriately.  |
+| Decorator    | Description                                                                | Params                                                                 |
+| ------------ | -------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `ResMethod`  | handles and validates the generated HTTP errors, processes the responses and sends them to the client appropriately.  | StatusCode: indicates the success status code for the operation (200, 201)
 
 ## Using the Package with TypeScript
 
@@ -118,7 +118,7 @@ const userService = new UserService();
 export class UserController {
   constructor() {}
 
-  @ResMethod()
+  @ResMethod(200)
   async getUserById(req: Request, res: Response) {
     const { id } = req.params;
     const foundUser = await userService.getUserById(id);
@@ -127,8 +127,26 @@ export class UserController {
 }
 ```
 
-### Example Response
-If `NotFoundError` is thrown, the client will receive:
+### In case of success
+If the operation is successful, this is what the response looks like:
+```json
+{
+  "statusCode": 200,
+  "error": false,
+  "message": "success",
+  "data": {
+    "user": {
+      "id" : "xxxxxx",
+      "name": "John",
+      "lastName": "Doe",
+      "email": "JohnDoe@mail.com"
+    }
+  }
+}
+```
+
+### In case of error
+If user is not found, this is what the response looks like:
 ```json
 {
   "statusCode": 404,
