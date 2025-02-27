@@ -24,7 +24,7 @@ interface IResMethodOptions {
  * }
  * ```
  */
-export function ResMethod(options: IResMethodOptions) {
+export function ResMethod(options : IResMethodOptions = {}) {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
 
