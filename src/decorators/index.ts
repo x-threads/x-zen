@@ -1,1 +1,1 @@
-export * from './resMethod.decorator'
+export * from './res-method.decorator'
