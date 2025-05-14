@@ -8,7 +8,7 @@
  * @param {string} [error] - The HTTP status code associated with the error.
  */
 export class HttpErrors extends Error {
-  private error : string;
+  public error : string;
   constructor(public statusCode: number, public errorMessage: string, error : string) {
     super(errorMessage || 'Error not especified');
     this.statusCode = statusCode;
