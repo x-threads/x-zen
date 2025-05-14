@@ -6,5 +6,5 @@ interface ResponseData {
 }
 
 export function ResponseHandler(res: any,{ statusCode, message = "", data = null }: ResponseData) {
-  return res.status(statusCode).json({ statusCode, error: false, message, data });
+  return res.status(statusCode).json({ statusCode, message, data });
 }
