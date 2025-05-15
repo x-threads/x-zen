@@ -1,7 +1,7 @@
-import { ResponseHandler } from "../handlers/response.handler";
-import { ErrorHandler } from "../handlers/error.handler";
+import { ResponseHandler } from "../../handlers/response.handler";
+import { ErrorHandler } from "../../handlers/error.handler";
 
-interface IResMethodOptions {
+interface IRestMethodOptions {
   statusCode?: 200 | 201;
   message?: string;
 }
@@ -17,14 +17,14 @@ interface IResMethodOptions {
  * @example
  * ```typescript
  * class MyController {
- *   @ResMethod({ statusCode: 201, message: "Created successfully" })
+ *   @RestMethod({ statusCode: 201, message: "Created successfully" })
  *   async createResource(req: Request, res: Response) {
  *     // method implementation
  *   }
  * }
  * ```
  */
-export function ResMethod(options : IResMethodOptions = {}) {
+export function RestMethod(options : IRestMethodOptions = {}) {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
 
