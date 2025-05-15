@@ -1,6 +1,6 @@
 {
   "name": "x-zen",
-  "version": "1.0.12",
+  "version": "1.0.14",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -27,14 +27,17 @@
   ],
   "description": "A lightweight package that simplifies the handling of HTTP responses and errors in Express applications.",
   "exports": {
-   ".": {
-    "require": "./dist/index.js",
-    "import": "./dist/index.js",
-    "types": "./dist/index.d.ts"
-  }
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
   },
   "devDependencies": {
     "@types/node": "^22.5.5",
     "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.2.2"
   }
 }
