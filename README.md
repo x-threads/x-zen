@@ -1,16 +1,21 @@
 # x-zen
 
-`x-zen` is a package to manage and handle HTTP responses and errors in Express applications in a simple and efficient way. It provides specific error classes for the most common HTTP codes.
+**x-zen** is a lightweight toolkit for structuring Express apps with TypeScript decorators. It simplifies error handling, routing, and response formatting for clean and maintainable code.
 
-It also handles http responses in a very simple way.
+---
 
-## Installation and Configuration
+## 🚀 Installation
 
-To install the package, use npm:
-
+using npm
 ```bash
 npm install x-zen
 ```
+
+using yarn
+```bash
+yarn add x-zen
+```
+
 >[!IMPORTANT]
 >Now we have to enable these options in our `tsconfig.json` to be able to use decorators in TypeScript:
 
@@ -35,6 +40,7 @@ Here are the available error classes in the package:
 
 Here are the responses the client receives when an error is thrown:
 
+* examples 
 ### `NotFoundError` (404)
 ```json
 {
@@ -62,31 +68,22 @@ Here are the responses the client receives when an error is thrown:
 }
 ```
 
-### `UnauthorizedError` (401)
-```json
-{
-  "statusCode": 401,
-  "errorMessage": "Unauthorized Error",
-  "error" : "Unauthorized"
-}
-```
-
-### `ForbiddenError` (403)
-```json
-{
-  "statusCode": 403,
-  "errorMessage": "Forbidden Error",
-  "error" : "Forbidden"
-}
-```
 
 ## Decorators List
 
 These are some of the decorators provided at the moment:
 
-| Decorator    | Description                                                                | Params                                                                 |
-| ------------ | -------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `ResMethod`  | handles and validates the generated HTTP errors, processes the responses and sends them to the client appropriately.  | StatusCode: indicates the success status code for the operation (200, 201)
+| Decorator      | Type     | Description                                                                                          | Parameters                                                                                                                                               |
+| -------------- | -------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@Controller`  | Class    | Marks a class as a controller and defines a base path for all routes in that class.                 | - `basePath`: Base route path for all methods in the controller. Example: `/users`                                                                       |
+| `@ResMethod`   | Method   | Handles HTTP success responses and errors thrown inside the method. Automatically formats the reply. | - `statusCode`: HTTP status code for success (e.g. `200`, `201`) *(optional)*<br>- `message`: Success message *(optional)*                               |
+| `@Get`         | Method   | Maps the method to an HTTP GET route.                                                                | - `path`: Relative route path (e.g. `/list`, `/:id`)                                                                                                     |
+| `@Post`        | Method   | Maps the method to an HTTP POST route.                                                               | - `path`: Relative route path                                                                                                                            |
+| `@Put`         | Method   | Maps the method to an HTTP PUT route.                                                                | - `path`: Relative route path                                                                                                                            |
+| `@Patch`       | Method   | Maps the method to an HTTP PATCH route.                                                              | - `path`: Relative route path                                                                                                                            |
+| `@Delete`      | Method   | Maps the method to an HTTP DELETE route.                                                             | - `path`: Relative route path                                                                                                                            |
+
+
 
 ## Using the Package with TypeScript
 
@@ -106,19 +103,21 @@ export class UserService {
 }
 ```
 
-### Example: `UserController.ts`
+### Example: `UserController.ts` with @RestController decorator
 
 ```typescript
 import { Request, Response } from 'express';
-import { ResMethod } from 'x-zen';
+import { RestController, Get, RestMethod } from 'x-zen';
 import { UserService } from './UserService';
 
 const userService = new UserService();
 
+@RestController('users')
 export class UserController {
   constructor() {}
 
-  @ResMethod({ statusCode: 200, message: "User Was Found" })
+  @Get('/:id')
+  @RestMethod({ statusCode: 200, message: "User Was Found" })
   async getUserById(req: Request, res: Response) {
     const { id } = req.params;
     const foundUser = await userService.getUserById(id);
@@ -174,16 +173,19 @@ If user is not found, this is what the response looks like:
   "error" : "Not Found"
 }
 ```
+---
 
-## Using the Package with JavaScript
+## Using x-zen with JavaScript
 
-In JavaScript, since decorators are not natively supported, we handle errors using a try-catch block:
+If you're working in a JavaScript environment (where decorators aren't natively supported), you can still benefit from x-zen by manually using the provided utilities for response and error handling.
+
+Here's how you can use ResponseHandler and ErrorHandler to handle responses and exceptions in a controller method:
 
 ### Example: `UserController.js`
 
 ```javascript
 import { Request, Response } from 'express';
-import { HttpErrors } from 'x-zen';
+import { ErrorHandler, ResponseHandler  } from 'x-zen';
 import { UserService } from './UserService';
 
 const userService = new UserService();
@@ -195,17 +197,32 @@ export class UserController {
     try {
       const { id } = req.params;
       const user = await userService.getUserById(id);
-      return res.statusCode(200).json(user);
+      ResponseHandler(res, { statusCode: options.statusCode ?? 200, message: options.message ?? "success", data: result });
     } catch (error) {
-      return error instanceof HttpErrors
-        ? res.status(error.statusCode).json(error)
-        : res.status(500).json({ 
-        statusCode: 500, errorMessage: "Internal Server Error" });
+      ErrorHandler(error, res);
     }
   }
 }
 ```
 
+### In this example:
+
+    If userService.getUserById(id) throws a NotFoundError or another error, ErrorHandler will automatically handle the response with the appropriate status code and error message.
+
+    ResponseHandler sends a standardized success response.
+
+This approach provides the same consistency and structure as using decorators in TypeScript, ensuring your app responds with clean, predictable JSON payloads.
+
+
 ## Summary
 
-With `x-zen`, you can handle errors and HTTP responses in Express applications easily, either using decorators in TypeScript or a standard approach with `try-catch` in JavaScript. This ensures clear, efficient and easy-to-maintain error handling.
+With `x-zen`, you can easily handle HTTP responses and errors in Express applications using a clean and declarative decorator-based approach in TypeScript.
+
+The package allows you to:
+
+- Automatically format successful responses and handle exceptions using `@RestMethod`.
+- Define routes directly in your controller methods using `@Get`, `@Post`, `@Put`, `@Patch`, and `@Delete`.
+- Register controllers with base paths using `@RestController`.
+- Keep your code modular, readable, and consistent by removing repetitive `try-catch` blocks and manual response handling.
+
+This approach leads to better structure, reduces boilerplate, and improves maintainability of your Express applications.
