@@ -7,10 +7,8 @@ import 'reflect-metadata';
  * @returns A class decorator function that sets the 'basePath' metadata on the target class.
  *
  * @example
- * ```typescript
  * @RestController('/api/users')
  * class UserController { ... }
- * ```
  */
 export function RestController(basePath: string = '') {
   return function (target: any) {
