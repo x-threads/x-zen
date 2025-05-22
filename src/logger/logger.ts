@@ -29,19 +29,11 @@ export class Logger implements ILogger {
     private logger;
     private context?: string | Symbol;
     private timestamp?: boolean;
-    private static instance: Logger;
 
-    private constructor() {
+    constructor(options: LoggerOptions) {
         this.logger = console.log;
-    }
-
-    public static getInstance(options: LoggerOptions): Logger {
-        if (!Logger.instance) {
-            Logger.instance = new Logger();
-        }
-        Logger.instance.context = options.context;
-        Logger.instance.timestamp = options.timestamp;
-        return Logger.instance;
+        this.context = options.context;
+        this.timestamp = options.timestamp;
     }
 
     log(message: string): void {
