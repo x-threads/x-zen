@@ -131,7 +131,6 @@ If the operation is successful, this is what the response looks like:
 ```json
 {
   "statusCode": 200,
-  "error": false,
   "message": "User Was Found",
   "data": {
     "user": {
@@ -151,7 +150,6 @@ If the operation is successful, this is what the response looks like:
 ```json
 {
   "statusCode": 200,
-  "error": false,
   "message": "success",
   "data": {
     "user": {
@@ -197,7 +195,7 @@ export class UserController {
     try {
       const { id } = req.params;
       const user = await userService.getUserById(id);
-      ResponseHandler(res, { statusCode: options.statusCode ?? 200, message: options.message ?? "success", data: result });
+      ResponseHandler(res, { statusCode: 200, message: "success", data: user });
     } catch (error) {
       ErrorHandler(error, res);
     }
