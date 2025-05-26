@@ -1,6 +1,6 @@
 {
   "name": "x-zen",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "chalk": "^5.4.1",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "x-zen": "^1.0.20"
   }
 }
