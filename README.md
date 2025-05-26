@@ -120,8 +120,8 @@ export class UserController {
   @RestMethod({ statusCode: 200, message: "User Was Found" })
   async getUserById(req: Request, res: Response) {
     const { id } = req.params;
-    const foundUser = await userService.getUserById(id);
-    return foundUser;
+    const user = await userService.getUserById(id);
+    return user;
   }
 }
 ```
