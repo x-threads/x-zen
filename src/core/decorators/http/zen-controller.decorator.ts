@@ -10,7 +10,7 @@ import 'reflect-metadata';
  * @RestController('/api/users')
  * class UserController { ... }
  */
-export function RestController(basePath: string = '') {
+export function ZenController(basePath: string = '') {
   return function (target: any) {
     Reflect.defineMetadata('basePath', basePath, target);
   };

@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-export interface RouterOptions {
+interface RouterOptions {
   method: 'get' | 'post' | 'put' | 'delete' | 'patch';
   path: string;
 }

@@ -1,4 +1,6 @@
 export * from './http/rest-method.decorator'
-export * from './http/rest-controller.decorator'
+export * from './http/zen-controller.decorator'
 export * from './http/router.decorator'
 export * from './http/use-middleware.decorator'
+export * from './common/zen-module.decorator'
+export * from './common/zen-provider.decorator'

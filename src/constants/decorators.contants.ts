@@ -1,0 +1,1 @@
+export const ZEN_MODULE_METADATA = 'zen:module';
