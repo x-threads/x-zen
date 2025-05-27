@@ -39,16 +39,16 @@ export class Logger implements ILogger {
     log(message: string): void {
         if (this.timestamp) {
             const timestamp = new Date().toLocaleString();
-            this.logger(chalk.green(`(${this.context}) - ${timestamp} - ${message}`));
+            this.logger(chalk.green(`${timestamp} - [${this.context}] - ${message}`));
             return;
         }
-        this.logger(chalk.green(`(${this.context})  - ${message}`));
+        this.logger(chalk.green(`(${this.context}) - ${message}`));
     }
 
     error(message: string): void {
         if (this.timestamp) {
             const timestamp = new Date().toLocaleString();
-            this.logger(chalk.red(`(${this.context}) - ${timestamp} - ${message}`));
+            this.logger(chalk.red(`${timestamp} - [${this.context}] - ${message}`));
             return;
         }
         this.logger(chalk.red(`(${this.context}) - ${message}`));
@@ -57,7 +57,7 @@ export class Logger implements ILogger {
     warn(message: string): void {
         if (this.timestamp) {
             const timestamp = new Date().toLocaleString();
-            this.logger(chalk.yellow(`(${this.context}) - ${timestamp} - ${message}`));
+            this.logger(chalk.yellow(`${timestamp} - [${this.context}] - ${message}`));
             return;
         }
         this.logger(chalk.yellow(`(${this.context}) - ${message}`));
@@ -66,7 +66,7 @@ export class Logger implements ILogger {
     info(message: string): void {
         if (this.timestamp) {
             const timestamp = new Date().toLocaleString();
-            this.logger(chalk.blue(`(${this.context}])- ${timestamp} - ${message}`));
+            this.logger(chalk.blue(`${timestamp} - [${this.context}] - ${message}`));
             return;
         }
         this.logger(chalk.blue(`(${this.context}) - ${message}`));
@@ -75,7 +75,7 @@ export class Logger implements ILogger {
     debug(message: string): void {
         if (this.timestamp) {
             const timestamp = new Date().toLocaleString();
-            this.logger(chalk.magenta(`(${this.context}) - ${timestamp} - ${message}`));
+            this.logger(chalk.magenta(`${timestamp} - [${this.context}] - ${message}`));
             return;
         }
         this.logger(chalk.magenta(`(${this.context}) - ${message}`));
