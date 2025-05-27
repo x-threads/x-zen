@@ -16,11 +16,9 @@ export function RegisterControllers(app: any, controllers: any[]) {
 
   for (const controllerInstance of controllers) {
     const controllerClass = controllerInstance.constructor;
-    let basePath: string =
-      Reflect.getMetadata("basePath", controllerClass) || "";
+    let basePath: string = Reflect.getMetadata("basePath", controllerClass) || "";
     const routes = Reflect.getMetadata("routes", controllerClass) || [];
-    const classMiddlewares =
-      Reflect.getMetadata("middlewares", controllerClass) || [];
+    const classMiddlewares = Reflect.getMetadata("middlewares", controllerClass) || [];
 
     if (!basePath.startsWith("/")) {
       basePath = "/" + basePath;
@@ -60,6 +58,7 @@ export function RegisterControllers(app: any, controllers: any[]) {
           controllerClass.prototype,
           route.methodName
         ) || [];
+        
       const combinedMiddlewares = [...classMiddlewares, ...methodMiddlewares];
 
       app[route.method](
