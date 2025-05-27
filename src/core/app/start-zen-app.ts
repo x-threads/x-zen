@@ -19,13 +19,16 @@ export async function StartZenApplication(app: any, rootModule: any) {
 
   const allControllers: any[] = [];
   const allProviders: any[] = [];
+  const allModules: any[] = [];
 
   while (moduleQueue.length) {
     const module = moduleQueue.shift();
     if (visitedModules.has(module)) continue;
 
     visitedModules.add(module);
+    allModules.push(module.name);
     const metadata = Reflect.getMetadata(ZEN_MODULE_METADATA, module);
+
     if (!metadata) continue;
 
     if (metadata.imports) {
@@ -41,9 +44,14 @@ export async function StartZenApplication(app: any, rootModule: any) {
     }
   }
 
+  for (const moduleName of allModules) {
+    log(chalk.blue(`${timestamp} -`),
+      chalk.magenta(` [ZenModule] - ${moduleName}`));
+  }
+
   for (const provider of allProviders) {
-    log(chalk.blue(`(RegisterProviders) - ${timestamp} - `),
-      chalk.white(`[${provider.name}]`));
+    log(chalk.blue(`${timestamp} -`),
+      chalk.magenta(` [ZenProvider] - ${provider.name}`));
     ZenContainer.registerProvider(provider);
   }
 
