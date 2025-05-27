@@ -25,10 +25,10 @@ export function RegisterControllers(app: any, controllers: any[]) {
     }
 
     log(
-      chalk.blue(`(RegisterControllers) - ${timestamp} - `),
-      chalk.white(`[${controllerClass.name}] - {${basePath}}`),
+      chalk.blue(`${timestamp} -`),
+      chalk.magenta(` [Zen Controller Loader] - ${controllerClass.name} - {${basePath}}`),
       classMiddlewares.length > 0
-        ? chalk.green(
+        ? chalk.white(
             ` - (+${classMiddlewares.length} middleware${
               classMiddlewares.length > 1 ? "s" : ""
             } applied for every route)`
@@ -39,25 +39,21 @@ export function RegisterControllers(app: any, controllers: any[]) {
     if (!basePath) {
       log(
         chalk.yellow(
-          `Controller ${controllerClass.name} does not have a base path. Skipping.`
+          `ZenController ${controllerClass.name} does not have a base path. Skipping.`
         )
       );
       continue;
     }
 
     for (const route of routes) {
+
       if (!route.path.startsWith("/")) {
         route.path = "/" + route.path;
       }
 
       const fullPath = basePath + route.path;
 
-      const methodMiddlewares: any[] =
-        Reflect.getMetadata(
-          "middlewares",
-          controllerClass.prototype,
-          route.methodName
-        ) || [];
+      const methodMiddlewares: any[] = Reflect.getMetadata("middlewares",controllerClass.prototype,route.methodName) || [];
         
       const combinedMiddlewares = [...classMiddlewares, ...methodMiddlewares];
 
@@ -68,15 +64,15 @@ export function RegisterControllers(app: any, controllers: any[]) {
       );
 
       log(
-        chalk.blue(`(Route) ${timestamp} - `),
-        chalk.white(`[${route.method.toUpperCase()}] - {${fullPath}}`),
+        chalk.blue(`${timestamp} -`),
+        chalk.magenta(` [Route] - ${route.method.toUpperCase()} - {${fullPath}}`),
         methodMiddlewares.length > 0
-          ? chalk.green(
-              `(+${methodMiddlewares.length} middleware${
+          ? chalk.white(
+              ` - (+${methodMiddlewares.length} middleware${
                 methodMiddlewares.length > 1 ? "s" : ""
               })`
             )
-          : chalk.green(`(no middleware)`)
+          : chalk.white(` - (no middleware)`)
       );
     }
   }
