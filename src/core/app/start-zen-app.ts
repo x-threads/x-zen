@@ -46,12 +46,12 @@ export async function StartZenApplication(app: any, rootModule: any) {
 
   for (const moduleName of allModules) {
     log(chalk.blue(`${timestamp} -`),
-      chalk.magenta(` [ZenModule] - ${moduleName}`));
+      chalk.magenta(`[ZenModule] - ${moduleName}`));
   }
 
   for (const provider of allProviders) {
     log(chalk.blue(`${timestamp} -`),
-      chalk.magenta(` [ZenProvider] - ${provider.name}`));
+      chalk.magenta(`[ZenProvider] - ${provider.name}`));
     ZenContainer.registerProvider(provider);
   }
 

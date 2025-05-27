@@ -42,7 +42,7 @@ export class Logger implements ILogger {
             this.logger(chalk.green(`${timestamp} - [${this.context}] - ${message}`));
             return;
         }
-        this.logger(chalk.green(`(${this.context}) - ${message}`));
+        this.logger(chalk.green(`[${this.context}] - ${message}`));
     }
 
     error(message: string): void {
@@ -51,7 +51,7 @@ export class Logger implements ILogger {
             this.logger(chalk.red(`${timestamp} - [${this.context}] - ${message}`));
             return;
         }
-        this.logger(chalk.red(`(${this.context}) - ${message}`));
+        this.logger(chalk.red(`[${this.context}] - ${message}`));
     }
 
     warn(message: string): void {
@@ -60,7 +60,7 @@ export class Logger implements ILogger {
             this.logger(chalk.yellow(`${timestamp} - [${this.context}] - ${message}`));
             return;
         }
-        this.logger(chalk.yellow(`(${this.context}) - ${message}`));
+        this.logger(chalk.yellow(`[${this.context}] - ${message}`));
     }
 
     info(message: string): void {
@@ -69,7 +69,7 @@ export class Logger implements ILogger {
             this.logger(chalk.blue(`${timestamp} - [${this.context}] - ${message}`));
             return;
         }
-        this.logger(chalk.blue(`(${this.context}) - ${message}`));
+        this.logger(chalk.blue(`[${this.context}] - ${message}`));
     }
 
     debug(message: string): void {
@@ -78,6 +78,6 @@ export class Logger implements ILogger {
             this.logger(chalk.magenta(`${timestamp} - [${this.context}] - ${message}`));
             return;
         }
-        this.logger(chalk.magenta(`(${this.context}) - ${message}`));
+        this.logger(chalk.magenta(`[${this.context}] - ${message}`));
     }
 }
