@@ -11,15 +11,16 @@ import { HttpErrors } from "../errors/http-errors";
  * @param res - The Express response object used to send the HTTP response.
  */
 export function ErrorHandler(error: any, res: any) {
-  if (error instanceof HttpErrors) return res.status(error.statusCode).json({
-    statusCode: error.statusCode,
-    errorMessage: error.errorMessage || "Error Message Not Provided",
-    error: error.error
-  });
+  if (error instanceof HttpErrors)
+    return res.status(error.statusCode).json({
+      statusCode: error.statusCode,
+      errorMessage: error.errorMessage || "Error Message Not Provided",
+      error: error.error,
+    });
 
   return res.status(500).json({
     statusCode: 500,
     errorMessage: error.message || "Error Message Not Provided",
-    error: 'Internal Server Error'
+    error: "Internal Server Error",
   });
 }

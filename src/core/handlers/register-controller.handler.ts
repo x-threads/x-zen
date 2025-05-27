@@ -1,4 +1,4 @@
-import chalk from 'chalk'
+import chalk from "chalk";
 
 /**
  * Registers controller routes with the provided application instance.
@@ -15,36 +15,51 @@ export function RegisterControllers(app: any, controllers: any[]) {
   const timestamp = new Date().toLocaleString();
 
   for (const controllerInstance of controllers) {
-
     const controllerClass = controllerInstance.constructor;
-    let basePath: string = Reflect.getMetadata('basePath', controllerClass) || '';
-    const routes = Reflect.getMetadata('routes', controllerClass) || [];
-    const classMiddlewares = Reflect.getMetadata('middlewares', controllerClass) || [];
+    let basePath: string =
+      Reflect.getMetadata("basePath", controllerClass) || "";
+    const routes = Reflect.getMetadata("routes", controllerClass) || [];
+    const classMiddlewares =
+      Reflect.getMetadata("middlewares", controllerClass) || [];
 
-    if (!basePath.startsWith('/')) {
-      basePath = '/' + basePath;
+    if (!basePath.startsWith("/")) {
+      basePath = "/" + basePath;
     }
 
     log(
       chalk.blue(`(RegisterControllers) - ${timestamp} - `),
       chalk.white(`[${controllerClass.name}] - {${basePath}}`),
-      classMiddlewares.length > 0 ? chalk.green(` - (+${classMiddlewares.length} middleware${classMiddlewares.length > 1 ? 's' : ''} applied for every route)`) : ''
+      classMiddlewares.length > 0
+        ? chalk.green(
+            ` - (+${classMiddlewares.length} middleware${
+              classMiddlewares.length > 1 ? "s" : ""
+            } applied for every route)`
+          )
+        : ""
     );
 
     if (!basePath) {
-      log(chalk.yellow(`Controller ${controllerClass.name} does not have a base path. Skipping.`));
+      log(
+        chalk.yellow(
+          `Controller ${controllerClass.name} does not have a base path. Skipping.`
+        )
+      );
       continue;
     }
 
     for (const route of routes) {
-
-      if (!route.path.startsWith('/')) {
-        route.path = '/' + route.path;
+      if (!route.path.startsWith("/")) {
+        route.path = "/" + route.path;
       }
 
       const fullPath = basePath + route.path;
 
-      const methodMiddlewares: any[] = Reflect.getMetadata('middlewares', controllerClass.prototype, route.methodName) || [];
+      const methodMiddlewares: any[] =
+        Reflect.getMetadata(
+          "middlewares",
+          controllerClass.prototype,
+          route.methodName
+        ) || [];
       const combinedMiddlewares = [...classMiddlewares, ...methodMiddlewares];
 
       app[route.method](
@@ -57,10 +72,13 @@ export function RegisterControllers(app: any, controllers: any[]) {
         chalk.blue(`(Route) ${timestamp} - `),
         chalk.white(`[${route.method.toUpperCase()}] - {${fullPath}}`),
         methodMiddlewares.length > 0
-          ? chalk.green(`(+${methodMiddlewares.length} middleware${methodMiddlewares.length > 1 ? 's' : ''})`)
+          ? chalk.green(
+              `(+${methodMiddlewares.length} middleware${
+                methodMiddlewares.length > 1 ? "s" : ""
+              })`
+            )
           : chalk.green(`(no middleware)`)
       );
-
     }
   }
 }

@@ -4,7 +4,6 @@ interface ResponseData {
   data?: any;
 }
 
-
 /**
  * Handles sending a standardized JSON response.
  *
@@ -15,6 +14,9 @@ interface ResponseData {
  * @param param1.data - Optional data to include in the response body.
  * @returns The response object with the specified status and JSON body.
  */
-export function ResponseHandler(res: any,{ statusCode, message = "", data = null }: ResponseData) {
+export function ResponseHandler(
+  res: any,
+  { statusCode, message = "", data = null }: ResponseData
+) {
   return res.status(statusCode).json({ statusCode, message, data });
 }
