@@ -3,9 +3,7 @@
 
 ![x-zen logo](https://user-images.githubusercontent.com/yourusername/x-zen-logo.png)
 
-**x-zen** is a lightweight and modular TypeScript framework inspired by NestJS, built with a simple core to provide flexibility and clarity.
-
-It enables building scalable backend apps with decorators, dependency injection, modular architecture, and expressive HTTP routing — without unnecessary overhead.
+**x-zen** — Minimal Framework for Scalable Node.js Applications x-zen is a lightweight and modular TypeScript framework inspired by the design philosophy of NestJS, but with a simplified and flexible core. It provides a clean, declarative way to build backend applications using decorators, dependency injection, and modular architecture. 
 
 ---
 
@@ -54,7 +52,7 @@ export class UserService {
 ### Create a controller
 
 ```typescript
-import { ZenController, Get } from 'x-zen';
+import { ZenController, Get, RestMethod } from 'x-zen';
 import { UserService } from './user.service';
 
 @ZenController('/users')
@@ -62,8 +60,9 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('/list')
+  @RestMethod({statusCode: 200, message: 'users'})
   getAll(req, res) {
-    return res.json(this.userService.getUsers());
+    return this.userService.getUsers();
   }
 }
 ```
@@ -80,7 +79,7 @@ export function LogMiddleware(req, res, next) {
 Attach at controller level:
 
 ```typescript
-import { ZenController, Get, UseMiddleware } from 'x-zen';
+import { ZenController, Get, UseMiddleware, RestMethod } from 'x-zen';
 import { LogMiddleware } from './log.middleware';
 import { UserService } from './user.service';
 
@@ -90,8 +89,9 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('/list')
+  @RestMethod({statusCode: 200, message: 'users'})
   getAll(req, res) {
-    return res.json(this.userService.getUsers());
+    return this.userService.getUsers();
   }
 }
 ```
@@ -99,7 +99,7 @@ export class UserController {
 Or at route level:
 
 ```typescript
-import { ZenController, Get, UseMiddleware } from 'x-zen';
+import { ZenController, Get, UseMiddleware, RestMethod } from 'x-zen';
 import { LogMiddleware } from './log.middleware';
 import { UserService } from './user.service';
 
@@ -107,8 +107,9 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseMiddleware(LogMiddleware)
   @Get('/list')
+  @UseMiddleware(LogMiddleware)
+  @RestMethod({statusCode: 200, message: 'users'})
   getAll(req, res) {
     return res.json(this.userService.getUsers());
   }
