@@ -1,226 +1,254 @@
-# x-zen
 
-**x-zen** is a lightweight toolkit for structuring Express apps with TypeScript decorators. It simplifies error handling, routing, and response formatting for clean and maintainable code.
+# 🧘 x-zen — Minimal Framework for Scalable Node.js Applications
+
+![x-zen logo](https://user-images.githubusercontent.com/yourusername/x-zen-logo.png)
+
+**x-zen** is a lightweight and modular TypeScript framework inspired by NestJS, built with a simple core to provide flexibility and clarity.
+
+It enables building scalable backend apps with decorators, dependency injection, modular architecture, and expressive HTTP routing — without unnecessary overhead.
+
+---
+
+## ✨ Features
+
+- **📦 Dependency Injection** — Automatic class resolution with `@ZenProvider()` decorator.
+- **🧱 Modular Architecture** — Group related components using `@ZenModule`, import modules effortlessly.
+- **🌐 Route Controllers** — Use `@ZenController` with `@Get`, `@Post`, etc., for clean REST APIs.
+- **🧩 Middleware Support** — Attach middleware at controller or route level.
+- **🚀 Express Compatible** — Built on Express.js for maximum compatibility.
+- **🔁 Extensible** — Minimal core, maximum control.
 
 ---
 
 ## 🚀 Installation
 
-using npm
 ```bash
 npm install x-zen
-```
-
-using yarn
-```bash
+# or
 yarn add x-zen
 ```
 
->[!IMPORTANT]
->Now we have to enable these options in our `tsconfig.json` to be able to use decorators in TypeScript:
+> **Note:** Enable these TypeScript options to use decorators:
+> ```json
+> "experimentalDecorators": true,
+> "emitDecoratorMetadata": true
+> ```
 
-```json
-"experimentalDecorators": true,
-"emitDecoratorMetadata": true  
-```
+---
 
-## Error List
+## Quick Start
 
-Here are the available error classes in the package:
-
-| Error Class           | HTTP statusCode Code | Description                            |
-| --------------------- | ---------------- | -------------------------------------- |
-| `NotFoundError`       | 404              | Represents a 404 Not Found error       |
-| `BadRequestError`     | 400              | Represents a 400 Bad Request error     |
-| `InternalServerError` | 500              | Represents a 500 Internal Server Error |
-| `UnauthorizedError`   | 401              | Represents a 401 Unauthorized error    |
-| `ForbiddenError`      | 403              | Represents a 403 Forbidden error       |
-
-## Error Responses
-
-Here are the responses the client receives when an error is thrown:
-
-* examples 
-### `NotFoundError` (404)
-```json
-{
-  "statusCode": 404,
-  "errorMessage": "Not Found Error",
-  "error" : "Not Found"
-}
-```
-
-### `BadRequestError` (400)
-```json
-{
-  "statusCode": 400,
-  "errorMessage": "Bad Request Error",
-  "error" : "Bad Request"
-}
-```
-
-### `InternalServerError` (500)
-```json
-{
-  "statusCode": 500,
-  "errorMessage": "Internal Server Error",
-  "error" : "Internal Server Error"
-}
-```
-
-
-## Decorators List
-
-These are some of the decorators provided at the moment:
-
-| Decorator      | Type     | Description                                                                                          | Parameters                                                                                                                                               |
-| -------------- | -------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@RestController`  | Class    | Marks a class as a controller and defines a base path for all routes in that class.                 | - `basePath`: Base route path for all methods in the controller. Example: `/users`                                                                       |
-| `@RestMethod`   | Method   | Handles HTTP success responses and errors thrown inside the method. Automatically formats the reply. | - `statusCode`: HTTP status code for success (e.g. `200`, `201`) *(optional)*<br>- `message`: Success message *(optional)*                               |
-| `@Get`         | Method   | Maps the method to an HTTP GET route.                                                                | - `path`: Relative route path (e.g. `/list`, `/:id`)                                                                                                     |
-| `@Post`        | Method   | Maps the method to an HTTP POST route.                                                               | - `path`: Relative route path                                                                                                                            |
-| `@Put`         | Method   | Maps the method to an HTTP PUT route.                                                                | - `path`: Relative route path                                                                                                                            |
-| `@Patch`       | Method   | Maps the method to an HTTP PATCH route.                                                              | - `path`: Relative route path                                                                                                                            |
-| `@Delete`      | Method   | Maps the method to an HTTP DELETE route.                                                             | - `path`: Relative route path                                                                                                                            |
-
-
-
-## Using the Package with TypeScript
-
-### Example: `UserService.ts`
+### Create a provider
 
 ```typescript
-import { NotFoundError } from 'x-zen';
+import { ZenProvider } from 'x-zen';
 
+@ZenProvider()
 export class UserService {
-  constructor() {}
+  getUsers() {
+    return [{ id: 1, name: 'Zen' }];
+  }
+}
+```
 
-  async getUserById(id: string) {
-    const user = await this.user.findById(id);
+### Create a controller
+
+```typescript
+import { ZenController, Get } from 'x-zen';
+import { UserService } from './user.service';
+
+@ZenController('/users')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+
+  @Get('/list')
+  getAll(req, res) {
+    return res.json(this.userService.getUsers());
+  }
+}
+```
+
+### Use middleware
+
+```typescript
+export function LogMiddleware(req, res, next) {
+  console.log('Request logged');
+  next();
+}
+```
+
+Attach at controller level:
+
+```typescript
+import { ZenController, Get, UseMiddleware } from 'x-zen';
+import { LogMiddleware } from './log.middleware';
+import { UserService } from './user.service';
+
+@UseMiddleware(LogMiddleware)
+@ZenController('/users')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+
+  @Get('/list')
+  getAll(req, res) {
+    return res.json(this.userService.getUsers());
+  }
+}
+```
+
+Or at route level:
+
+```typescript
+import { ZenController, Get, UseMiddleware } from 'x-zen';
+import { LogMiddleware } from './log.middleware';
+import { UserService } from './user.service';
+
+@ZenController('/users')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+
+  @UseMiddleware(LogMiddleware)
+  @Get('/list')
+  getAll(req, res) {
+    return res.json(this.userService.getUsers());
+  }
+}
+```
+
+### Create a module
+#### you can create a zenModule to group modules, controllers and providers
+
+```typescript
+import { ZenModule } from 'x-zen';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
+
+@ZenModule({
+  controllers: [UserController],
+  providers: [UserService],
+})
+export class UserModule {}
+```
+
+### Bootstrap application
+
+```typescript
+import express from 'express';
+import { StartZenApplication } from 'x-zen';
+import { UserModule } from './user.module';
+
+async function bootstrap() {
+  const app = express();
+  app.use(express.json());
+
+  await StartZenApplication(app, UserModule);
+
+  app.listen(3000, () => console.log('🚀 Server running on http://localhost:3000'));
+}
+
+bootstrap();
+```
+
+### Import other modules
+
+```typescript
+import { ZenModule } from 'x-zen';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { UserModule } from './user.module';
+
+@ZenModule({
+  controllers: [AppController],
+  providers: [AppService],
+  imports: [UserModule],
+})
+export class AppModule {}
+```
+
+---
+
+## Using `@RestMethod` Decorator
+
+The `@RestMethod` decorator handles HTTP responses automatically.
+
+- You **do not** need to manually catch or handle errors inside methods decorated with `@RestMethod`. Any thrown error will be caught and formatted into a consistent HTTP error response.
+- Simply **return** the data from your method, and `@RestMethod` will send a standardized success response.
+- Error responses and success responses follow a consistent JSON format (see below).
+
+### Example
+
+```typescript
+import { ZenController, Get, RestMethod, NotFoundError } from 'x-zen';
+
+@ZenController('/users')
+export class UserController {
+  @Get('/:id')
+  @RestMethod({ statusCode: 200, message: "User retrieved successfully" })
+  async getUserById(req, res) {
+    const id = req.params.id;
+    const user = await findUser(id);
     if (!user) throw new NotFoundError(`User not found with ID ${id}`);
     return user;
   }
 }
 ```
 
-### Example: `UserController.ts` with @RestController decorator
-
-```typescript
-import { Request, Response } from 'express';
-import { RestController, Get, RestMethod } from 'x-zen';
-import { UserService } from './UserService';
-
-const userService = new UserService();
-
-@RestController('users')
-export class UserController {
-  constructor() {}
-
-  @Get('/:id')
-  @RestMethod({ statusCode: 200, message: "User Was Found" })
-  async getUserById(req: Request, res: Response) {
-    const { id } = req.params;
-    const user = await userService.getUserById(id);
-    return user;
-  }
-}
-```
-
-### In case of success
-If the operation is successful, this is what the response looks like:
-```json
-{
-  "statusCode": 200,
-  "message": "User Was Found",
-  "data": {
-    "user": {
-      "id" : "xxxxxx",
-      "name": "John",
-      "lastName": "Doe",
-      "email": "JohnDoe@mail.com"
-    }
-  }
-}
-```
-
->[!TIP]
->you can omit the decorator parameters and the default values will be sent
-### With default values
+### Success response format
 
 ```json
 {
   "statusCode": 200,
-  "message": "success",
+  "message": "User retrieved successfully",
   "data": {
-    "user": {
-      "id" : "xxxxxx",
-      "name": "John",
-      "lastName": "Doe",
-      "email": "JohnDoe@mail.com"
-    }
+    /* returned user data */
   }
 }
 ```
 
-### In case of error
-If user is not found, this is what the response looks like:
+### Error response format
+
 ```json
 {
   "statusCode": 404,
   "errorMessage": "User not found with ID {id}",
-  "error" : "Not Found"
+  "error": "Not Found"
 }
 ```
+
 ---
 
-## Using x-zen with JavaScript
+## HTTP Error Classes
 
-If you're working in a JavaScript environment (where decorators aren't natively supported), you can still benefit from x-zen by manually using the provided utilities for response and error handling.
+| Class Name            | HTTP Status | Description                          |
+| --------------------- | ----------- | ---------------------------------- |
+| `NotFoundError`       | 404         | Resource not found                  |
+| `BadRequestError`     | 400         | Bad request                        |
+| `UnauthorizedError`   | 401         | Authentication required             |
+| `ForbiddenError`      | 403         | Access forbidden                   |
+| `InternalServerError` | 500         | Internal server error               |
 
-Here's how you can use ResponseHandler and ErrorHandler to handle responses and exceptions in a controller method:
+---
 
-### Example: `UserController.js`
+## Decorators Summary
 
-```javascript
-import { Request, Response } from 'express';
-import { ErrorHandler, ResponseHandler  } from 'x-zen';
-import { UserService } from './UserService';
+| Decorator        | Type   | Description                                   | Parameters                            |
+| ---------------- | ------ | ---------------------------------------------| ----------------------------------- |
+| `@ZenController` | Class  | Marks a class as a route controller           | `basePath` - base route for controller |
+| `@RestMethod`    | Method | Handles HTTP success and error responses      | `statusCode` (optional), `message` (optional) |
+| `@Get`           | Method | Maps method to HTTP GET route                   | `path` (relative route)             |
+| `@Post`          | Method | Maps method to HTTP POST route                  | `path` (relative route)             |
+| `@Put`           | Method | Maps method to HTTP PUT route                   | `path` (relative route)             |
+| `@Patch`         | Method | Maps method to HTTP PATCH route                 | `path` (relative route)             |
+| `@Delete`        | Method | Maps method to HTTP DELETE route                | `path` (relative route)             |
+| `@UseMiddleware` | Class / Method | Attaches middleware(s) at controller or route level | Middleware function or array        |
 
-const userService = new UserService();
+---
 
-export class UserController {
-  constructor() {}
+## Notes
 
-  async getUserById(req, res) {
-    try {
-      const { id } = req.params;
-      const user = await userService.getUserById(id);
-      ResponseHandler(res, { statusCode: 200, message: "success", data: user });
-    } catch (error) {
-      ErrorHandler(error, res);
-    }
-  }
-}
-```
-
-### In this example:
-
-    If userService.getUserById(id) throws a NotFoundError or another error, ErrorHandler will automatically handle the response with the appropriate status code and error message.
-
-    ResponseHandler sends a standardized success response.
-
-This approach provides the same consistency and structure as using decorators in TypeScript, ensuring your app responds with clean, predictable JSON payloads.
+- The framework uses Express.js under the hood, so all Express middleware and routing features are available.
+- Use the `@RestMethod` decorator on async controller methods to automatically handle response formatting and error catching.
+- The error classes are designed to help you throw HTTP errors with proper status codes and messages that `@RestMethod` will catch.
+- Middleware can be applied globally, at the controller level, or per-route.
 
 
-## Summary
-
-With `x-zen`, you can easily handle HTTP responses and errors in Express applications using a clean and declarative decorator-based approach in TypeScript.
-
-The package allows you to:
-
-- Automatically format successful responses and handle exceptions using `@RestMethod`.
-- Define routes directly in your controller methods using `@Get`, `@Post`, `@Put`, `@Patch`, and `@Delete`.
-- Register controllers with base paths using `@RestController`.
-- Keep your code modular, readable, and consistent by removing repetitive `try-catch` blocks and manual response handling.
-
-This approach leads to better structure, reduces boilerplate, and improves maintainability of your Express applications.
