@@ -1,6 +1,6 @@
-# 🧘 x-zen — Minimal Framework for Scalable Node.js Applications
+# 🧘 x-zen — Minimalist Framework for Scalable Node.js Applications
 
-**x-zen** is a lightweight and modular TypeScript framework inspired by NestJS, designed for building scalable backend applications with decorators, dependency injection, and modular architecture.
+**x-zen** is a minimalist, lightweight and modular typescript framework inspired by NestJS, designed to build scalable backend applications with decorators, dependency injection and modular architecture.
 
 ---
 
