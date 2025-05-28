@@ -28,7 +28,7 @@
     "dist",
     "README.md"
   ],
-  "description": "x-zen — Minimal Framework for Scalable Node.js Applications X-zen is a lightweight and modular TypeScript framework inspired by the design philosophy of NestJS, but with a simplified and flexible core. It provides a clean, declarative way to build backend applications using decorators, dependency injection, and modular architecture. ",
+  "description": "x-zen is a minimalist, lightweight and modular typescript framework inspired by NestJS, designed to build scalable backend applications with decorators, dependency injection and modular architecture. ",
   "exports": {
     ".": {
       "require": "./dist/index.js",

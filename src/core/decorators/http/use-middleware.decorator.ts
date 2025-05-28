@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { ZEN_MIDDLEWARE_METADATA } from '../../../constants';
 
 /**
  * Decorator to attach middleware functions to a class or method.
@@ -17,9 +18,9 @@ import 'reflect-metadata';
 export function UseMiddleware(...middlewares: Function[]) {
   return function (target: any, propertyKey?: string | symbol) {
     if (propertyKey) {
-      Reflect.defineMetadata('middlewares', middlewares, target, propertyKey);
+      Reflect.defineMetadata(ZEN_MIDDLEWARE_METADATA, middlewares, target, propertyKey);
     } else {
-      Reflect.defineMetadata('middlewares', middlewares, target);
+      Reflect.defineMetadata(ZEN_MIDDLEWARE_METADATA, middlewares, target);
     }
   };
 }

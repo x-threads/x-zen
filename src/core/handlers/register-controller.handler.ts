@@ -1,5 +1,5 @@
 import chalk from "chalk";
-
+import { ZEN_CONTROLLER_BASE_PATH_METADATA, ZEN_CONTROLLER_ROUTES_METADATA, ZEN_MIDDLEWARE_METADATA } from '../../constants'
 /**
  * Registers controller routes with the provided application instance.
  *
@@ -16,9 +16,9 @@ export function RegisterControllers(app: any, controllers: any[]) {
 
   for (const controllerInstance of controllers) {
     const controllerClass = controllerInstance.constructor;
-    let basePath: string = Reflect.getMetadata("basePath", controllerClass) || "";
-    const routes = Reflect.getMetadata("routes", controllerClass) || [];
-    const classMiddlewares = Reflect.getMetadata("middlewares", controllerClass) || [];
+    let basePath: string = Reflect.getMetadata(ZEN_CONTROLLER_BASE_PATH_METADATA, controllerClass) || "";
+    const routes = Reflect.getMetadata(ZEN_CONTROLLER_ROUTES_METADATA, controllerClass) || [];
+    const classMiddlewares = Reflect.getMetadata(ZEN_MIDDLEWARE_METADATA, controllerClass) || [];
 
     if (!basePath.startsWith("/")) {
       basePath = "/" + basePath;
@@ -29,10 +29,9 @@ export function RegisterControllers(app: any, controllers: any[]) {
       chalk.magenta(`[ZenController] - ${controllerClass.name} - {${basePath}}`),
       classMiddlewares.length > 0
         ? chalk.white(
-            ` - (+${classMiddlewares.length} middleware${
-              classMiddlewares.length > 1 ? "s" : ""
-            } applied for every route)`
-          )
+          ` - (+${classMiddlewares.length} middleware${classMiddlewares.length > 1 ? "s" : ""
+          } applied for every route)`
+        )
         : ""
     );
 
@@ -53,8 +52,8 @@ export function RegisterControllers(app: any, controllers: any[]) {
 
       const fullPath = basePath + route.path;
 
-      const methodMiddlewares: any[] = Reflect.getMetadata("middlewares",controllerClass.prototype,route.methodName) || [];
-        
+      const methodMiddlewares: any[] = Reflect.getMetadata(ZEN_MIDDLEWARE_METADATA, controllerClass.prototype, route.methodName) || [];
+
       const combinedMiddlewares = [...classMiddlewares, ...methodMiddlewares];
 
       app[route.method](
@@ -68,10 +67,9 @@ export function RegisterControllers(app: any, controllers: any[]) {
         chalk.magenta(`[Route] - ${route.method.toUpperCase()} - {${fullPath}}`),
         methodMiddlewares.length > 0
           ? chalk.white(
-              ` - (+${methodMiddlewares.length} middleware${
-                methodMiddlewares.length > 1 ? "s" : ""
-              })`
-            )
+            ` - (+${methodMiddlewares.length} middleware${methodMiddlewares.length > 1 ? "s" : ""
+            })`
+          )
           : chalk.white(` - (no middleware)`)
       );
     }
