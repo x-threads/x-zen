@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { ZEN_CONTROLLER_BASE_PATH_METADATA } from '../../../constants';
 
 /**
  * Class decorator that marks a class as a REST controller and assigns a base path for its routes.
@@ -12,6 +13,6 @@ import 'reflect-metadata';
  */
 export function ZenController(basePath: string = '') {
   return function (target: any) {
-    Reflect.defineMetadata('basePath', basePath, target);
+    Reflect.defineMetadata(ZEN_CONTROLLER_BASE_PATH_METADATA, basePath, target);
   };
 }

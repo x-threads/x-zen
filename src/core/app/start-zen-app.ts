@@ -1,8 +1,8 @@
 import "reflect-metadata";
 import chalk from "chalk";
-import { ZenContainer } from "../DI/zen-container";
+import { ZenContainer } from "../DI";
+import { ZEN_MODULE_METADATA } from "../../constants";
 import { RegisterControllers } from "../handlers/register-controller.handler";
-import { ZEN_MODULE_METADATA } from "../../constants/decorators.contants";
 
 /**
  * Starts the Zen application by resolving all modules, providers, and controllers.

@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { ZEN_CONTROLLER_ROUTES_METADATA } from '../../../constants';
 
 interface RouterOptions {
   method: 'get' | 'post' | 'put' | 'delete' | 'patch';
@@ -7,12 +8,12 @@ interface RouterOptions {
 
 export function Router(options: RouterOptions) {
   return function (target: any, propertyKey: string) {
-    const existingRoutes = Reflect.getMetadata('routes', target.constructor) || [];
+    const existingRoutes = Reflect.getMetadata(ZEN_CONTROLLER_ROUTES_METADATA, target.constructor) || [];
     existingRoutes.push({
       methodName: propertyKey,
       ...options,
     });
-    Reflect.defineMetadata('routes', existingRoutes, target.constructor);
+    Reflect.defineMetadata(ZEN_CONTROLLER_ROUTES_METADATA, existingRoutes, target.constructor);
   };
 }
 

@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { ZEN_MODULE_METADATA } from "../../../constants/decorators.contants";
+import { ZEN_MODULE_METADATA } from "../../../constants";
 
 interface ZenModuleOptions {
   controllers?: any[];
