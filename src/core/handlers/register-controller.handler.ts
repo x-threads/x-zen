@@ -26,7 +26,7 @@ export function RegisterControllers(app: any, controllers: any[]) {
 
     log(
       chalk.blue(`${timestamp} -`),
-      chalk.magenta(`[Zen Controller Loader] - ${controllerClass.name} - {${basePath}}`),
+      chalk.magenta(`[ZenController] - ${controllerClass.name} - {${basePath}}`),
       classMiddlewares.length > 0
         ? chalk.white(
             ` - (+${classMiddlewares.length} middleware${
