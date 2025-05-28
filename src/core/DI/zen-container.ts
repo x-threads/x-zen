@@ -1,4 +1,6 @@
 import "reflect-metadata";
+import { ZEN_PROVIDER_METADATA } from "../../constants";
+import { InstanceLoaderException } from "../exceptions/instance-loader.exception";
 
 type Constructor<T = any> = new (...args: any[]) => T;
 
@@ -19,8 +21,13 @@ export class ZenContainer {
   }
 
   static initialize() {
+
     for (const [Provider] of this.providers) {
       if (!this.providers.get(Provider)) {
+        const isZenProvider: Boolean = Reflect.getMetadata(ZEN_PROVIDER_METADATA, Provider)
+        if (!isZenProvider) {
+          throw new InstanceLoaderException(`Error when instantiating provider ${Provider.name}, make sure it is decorated with @ZenProvider() decorator`);
+        }
         this.providers.set(Provider, new Provider());
       }
     }
@@ -34,6 +41,7 @@ export class ZenContainer {
         );
         this.controllers.set(Controller, new Controller(...dependencies));
       }
+
     }
   }
 

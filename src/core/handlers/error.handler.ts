@@ -1,4 +1,4 @@
-import { HttpErrors } from "../http-exceptions";
+import { HttpErrors } from "../exceptions";
 
 /**
  * Handles errors and sends an appropriate HTTP response.
