@@ -1,11 +1,7 @@
 import "reflect-metadata";
 import { ZEN_MODULE_METADATA } from "../../../constants";
+import { ZenModuleOptions } from "../../../shared/interfaces/zen-module.interface";
 
-interface ZenModuleOptions {
-  controllers?: any[];
-  providers?: any[];
-  imports?: any[];
-}
 
 export function ZenModule(options: ZenModuleOptions): ClassDecorator {
   return (target: any) => {

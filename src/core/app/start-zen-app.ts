@@ -3,6 +3,7 @@ import chalk from "chalk";
 import { ZenContainer } from "../DI";
 import { ZEN_MODULE_METADATA } from "../../constants";
 import { RegisterControllers } from "../handlers/register-controller.handler";
+import { ZenModuleOptions } from "../../shared/interfaces/zen-module.interface";
 
 /**
  * Starts the Zen application by resolving all modules, providers, and controllers.
@@ -12,8 +13,6 @@ import { RegisterControllers } from "../handlers/register-controller.handler";
  * @param rootModule - The root module of the Zen application.
  */
 export async function StartZenApplication(app: any, rootModule: any) {
-  const log = console.log;
-  const timestamp = new Date().toLocaleString();
   const moduleQueue = [rootModule];
   const visitedModules = new Set();
 
@@ -27,31 +26,31 @@ export async function StartZenApplication(app: any, rootModule: any) {
 
     visitedModules.add(module);
     allModules.push(module.name);
-    const metadata = Reflect.getMetadata(ZEN_MODULE_METADATA, module);
+    const moduleMetadata: ZenModuleOptions = Reflect.getMetadata(ZEN_MODULE_METADATA, module);
 
-    if (!metadata) continue;
+    if (!moduleMetadata) continue;
 
-    if (metadata.imports) {
-      moduleQueue.push(...metadata.imports);
+    if (moduleMetadata.imports) {
+      moduleQueue.push(...moduleMetadata.imports);
     }
 
-    if (metadata.providers) {
-      allProviders.push(...metadata.providers);
+    if (moduleMetadata.providers) {
+      allProviders.push(...moduleMetadata.providers);
     }
 
-    if (metadata.controllers) {
-      allControllers.push(...metadata.controllers);
+    if (moduleMetadata.controllers) {
+      allControllers.push(...moduleMetadata.controllers);
     }
+
+    ZenContainer.registerModuleProvider(module.name, moduleMetadata.providers)
   }
 
   for (const moduleName of allModules) {
-    log(chalk.blue(`${timestamp} -`),
-      chalk.magenta(`[ZenModule] - ${moduleName}`));
+    LogInstancer('ZenModule', moduleName)
   }
 
   for (const provider of allProviders) {
-    log(chalk.blue(`${timestamp} -`),
-      chalk.magenta(`[ZenProvider] - ${provider.name}`));
+    LogInstancer('ZenProvider', provider);
     ZenContainer.registerProvider(provider);
   }
 
@@ -66,4 +65,13 @@ export async function StartZenApplication(app: any, rootModule: any) {
   );
 
   RegisterControllers(app, resolvedControllers);
+}
+
+
+
+export const LogInstancer = (context: string, module: any) => {
+  const log = console.log;
+  const timestamp = new Date().toLocaleString();
+  log(chalk.blue(`${timestamp} -`),
+    chalk.magenta(`[${context}] - ${module?.name || module}`));
 }
