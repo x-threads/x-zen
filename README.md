@@ -1,20 +1,19 @@
-
 # 🧘 x-zen — Minimal Framework for Scalable Node.js Applications
 
-![x-zen logo](https://user-images.githubusercontent.com/yourusername/x-zen-logo.png)
-
-**x-zen** — Minimal Framework for Scalable Node.js Applications x-zen is a lightweight and modular TypeScript framework inspired by the design philosophy of NestJS, but with a simplified and flexible core. It provides a clean, declarative way to build backend applications using decorators, dependency injection, and modular architecture. 
+**x-zen** is a lightweight and modular TypeScript framework inspired by NestJS, designed for building scalable backend applications with decorators, dependency injection, and modular architecture.
 
 ---
 
 ## ✨ Features
 
-- **📦 Dependency Injection** — Automatic class resolution with `@ZenProvider()` decorator.
-- **🧱 Modular Architecture** — Group related components using `@ZenModule`, import modules effortlessly.
-- **🌐 Route Controllers** — Use `@ZenController` with `@Get`, `@Post`, etc., for clean REST APIs.
-- **🧩 Middleware Support** — Attach middleware at controller or route level.
-- **🚀 Express Compatible** — Built on Express.js for maximum compatibility.
-- **🔁 Extensible** — Minimal core, maximum control.
+- **Dependency Injection**.
+- **Modular Architecture**.
+- **Route Controllers**.
+- **Middleware Support**.
+- **Express Compatible**.
+- **Automatic Response Handling**.
+- **Extensible**.
+- **Decorators**.
 
 ---
 
@@ -22,7 +21,8 @@
 
 ```bash
 npm install x-zen
-# or
+```
+```bash
 yarn add x-zen
 ```
 
@@ -36,7 +36,9 @@ yarn add x-zen
 
 ## Quick Start
 
-### Create a provider
+### Create a Provider
+
+A provider is a class that can be injected as a dependency into controllers or other providers. Use the `@ZenProvider()` decorator to register your class as a provider.
 
 ```typescript
 import { ZenProvider } from 'x-zen';
@@ -49,7 +51,9 @@ export class UserService {
 }
 ```
 
-### Create a controller
+### Create a Controller
+
+Controllers handle incoming HTTP requests and return responses. Use the `@ZenController` decorator to define a controller and HTTP method decorators like `@Get` to define routes.
 
 ```typescript
 import { ZenController, Get, RestMethod } from 'x-zen';
@@ -60,14 +64,25 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('/list')
-  @RestMethod({statusCode: 200, message: 'users'})
+  @RestMethod({ statusCode: 200, message: 'users' })
   getAll(req, res) {
     return this.userService.getUsers();
   }
 }
 ```
+### list of available method decorators
 
-### Use middleware
+| Decorator        | Type   | Description                                   | Parameters                            |
+| ---------------- | ------ | --------------------------------------------- | ------------------------------------- |
+| `@Get`           | Method | Maps method to HTTP GET route                 | `path` (relative route)               |
+| `@Post`          | Method | Maps method to HTTP POST route                | `path` (relative route)               |
+| `@Put`           | Method | Maps method to HTTP PUT route                 | `path` (relative route)               |
+| `@Patch`         | Method | Maps method to HTTP PATCH route               | `path` (relative route)               |
+| `@Delete`        | Method | Maps method to HTTP DELETE route              | `path` 
+
+### Use Middleware
+
+Middleware functions can be attached to controllers or individual routes using the `@UseMiddleware` decorator.
 
 ```typescript
 export function LogMiddleware(req, res, next) {
@@ -89,7 +104,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('/list')
-  @RestMethod({statusCode: 200, message: 'users'})
+  @RestMethod({ statusCode: 200, message: 'users' })
   getAll(req, res) {
     return this.userService.getUsers();
   }
@@ -109,15 +124,16 @@ export class UserController {
 
   @Get('/list')
   @UseMiddleware(LogMiddleware)
-  @RestMethod({statusCode: 200, message: 'users'})
+  @RestMethod({ statusCode: 200, message: 'users' })
   getAll(req, res) {
-    return res.json(this.userService.getUsers());
+    return this.userService.getUsers();
   }
 }
 ```
 
-### Create a module
-#### you can create a zenModule to group modules, controllers and providers
+### Create a Module
+
+Modules are used to organize related controllers and providers. Use the `@ZenModule` decorator to define a module. Modules can import other modules for better structure and reusability.
 
 ```typescript
 import { ZenModule } from 'x-zen';
@@ -131,26 +147,9 @@ import { UserService } from './user.service';
 export class UserModule {}
 ```
 
-### Bootstrap application
+### Import Other Modules
 
-```typescript
-import express from 'express';
-import { StartZenApplication } from 'x-zen';
-import { UserModule } from './user.module';
-
-async function bootstrap() {
-  const app = express();
-  app.use(express.json());
-
-  await StartZenApplication(app, UserModule);
-
-  app.listen(3000, () => console.log('🚀 Server running on http://localhost:3000'));
-}
-
-bootstrap();
-```
-
-### Import other modules
+Modules can import other modules to compose features and share providers/controllers.
 
 ```typescript
 import { ZenModule } from 'x-zen';
@@ -166,15 +165,35 @@ import { UserModule } from './user.module';
 export class AppModule {}
 ```
 
+### Bootstrap Application
+
+To start your application, use the `StartZenApplication` function, passing your root module and an Express app instance.
+
+```typescript
+import express from 'express';
+import { StartZenApplication } from 'x-zen';
+import { AppModule } from './user.module';
+
+async function bootstrap() {
+  const app = express();
+  app.use(express.json());
+
+  await StartZenApplication(app, AppModule);
+
+  app.listen(3000, () => console.log('🚀 Server running on http://localhost:3000'));
+}
+
+bootstrap();
+```
 ---
 
 ## Using `@RestMethod` Decorator
 
-The `@RestMethod` decorator handles HTTP responses automatically.
+The `@RestMethod` decorator automatically handles HTTP responses and errors.
 
-- You **do not** need to manually catch or handle errors inside methods decorated with `@RestMethod`. Any thrown error will be caught and formatted into a consistent HTTP error response.
-- Simply **return** the data from your method, and `@RestMethod` will send a standardized success response.
-- Error responses and success responses follow a consistent JSON format (see below).
+- **No need to manually catch errors** in methods decorated with `@RestMethod`. Any thrown error will be formatted as an HTTP error response.
+- **Return** data from your method; `@RestMethod` sends a standardized success response.
+- Responses follow a consistent JSON format.
 
 ### Example
 
@@ -183,6 +202,7 @@ import { ZenController, Get, RestMethod, NotFoundError } from 'x-zen';
 
 @ZenController('/users')
 export class UserController {
+
   @Get('/:id')
   @RestMethod({ statusCode: 200, message: "User retrieved successfully" })
   async getUserById(req, res) {
@@ -194,19 +214,17 @@ export class UserController {
 }
 ```
 
-### Success response format
+#### Success response format
 
 ```json
 {
   "statusCode": 200,
   "message": "User retrieved successfully",
-  "data": {
-    /* returned user data */
-  }
+  "data": { /* returned user data */ }
 }
 ```
 
-### Error response format
+#### Error response format
 
 ```json
 {
@@ -220,36 +238,40 @@ export class UserController {
 
 ## HTTP Error Classes
 
-| Class Name            | HTTP Status | Description                          |
-| --------------------- | ----------- | ---------------------------------- |
-| `NotFoundError`       | 404         | Resource not found                  |
-| `BadRequestError`     | 400         | Bad request                        |
-| `UnauthorizedError`   | 401         | Authentication required             |
-| `ForbiddenError`      | 403         | Access forbidden                   |
-| `InternalServerError` | 500         | Internal server error               |
+| Class Name            | HTTP Status | Description                |
+| --------------------- | ----------- | --------------------------|
+| `NotFoundError`       | 404         | Resource not found         |
+| `BadRequestError`     | 400         | Bad request                |
+| `UnauthorizedError`   | 401         | Authentication required    |
+| `ForbiddenError`      | 403         | Access forbidden           |
+| `InternalServerError` | 500         | Internal server error      |
 
 ---
 
 ## Decorators Summary
 
 | Decorator        | Type   | Description                                   | Parameters                            |
-| ---------------- | ------ | ---------------------------------------------| ----------------------------------- |
-| `@ZenController` | Class  | Marks a class as a route controller           | `basePath` - base route for controller |
+| ---------------- | ------ | --------------------------------------------- | ------------------------------------- |
+| `@ZenController` | Class  | Marks a class as a route controller           | `basePath` - base route for controller|
+| `@ZenModule`     | Class  | Groups controllers and providers into a module| `controllers`, `providers`, `imports` |
+| `@ZenProvider`   | Class  | Registers a class as an injectable provider   | None                                  |
 | `@RestMethod`    | Method | Handles HTTP success and error responses      | `statusCode` (optional), `message` (optional) |
-| `@Get`           | Method | Maps method to HTTP GET route                   | `path` (relative route)             |
-| `@Post`          | Method | Maps method to HTTP POST route                  | `path` (relative route)             |
-| `@Put`           | Method | Maps method to HTTP PUT route                   | `path` (relative route)             |
-| `@Patch`         | Method | Maps method to HTTP PATCH route                 | `path` (relative route)             |
-| `@Delete`        | Method | Maps method to HTTP DELETE route                | `path` (relative route)             |
-| `@UseMiddleware` | Class / Method | Attaches middleware(s) at controller or route level | Middleware function or array        |
+| `@Get`           | Method | Maps method to HTTP GET route                 | `path` (relative route)               |
+| `@Post`          | Method | Maps method to HTTP POST route                | `path` (relative route)               |
+| `@Put`           | Method | Maps method to HTTP PUT route                 | `path` (relative route)               |
+| `@Patch`         | Method | Maps method to HTTP PATCH route               | `path` (relative route)               |
+| `@Delete`        | Method | Maps method to HTTP DELETE route              | `path` (relative route)               |
+| `@UseMiddleware` | Class/Method | Attaches middleware(s) at controller or route level | Middleware function(s)         |
 
 ---
 
 ## Notes
 
-- The framework uses Express.js under the hood, so all Express middleware and routing features are available.
+- The framework uses Express.js under the hood; all Express middleware and routing features are available.
 - Use the `@RestMethod` decorator on async controller methods to automatically handle response formatting and error catching.
-- The error classes are designed to help you throw HTTP errors with proper status codes and messages that `@RestMethod` will catch.
+- The error classes help you throw HTTP errors with proper status codes and messages that `@RestMethod` will catch.
 - Middleware can be applied globally, at the controller level, or per-route.
+
+
 
 
