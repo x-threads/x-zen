@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { ZEN_PROVIDER_METADATA } from "../../constants";
 import { InstanceLoaderException } from "../exceptions/instance-loader.exception";
 import { LogInstancer } from "../../common/instancer-logger/instancer-logger";
-import { RegisterControllers } from "../handlers";
+import { RegisterControllers } from "../handlers/register-controller.handler";
 
 type Constructor<T = any> = new (...args: any[]) => T;
 
