@@ -1,5 +1,6 @@
 import chalk from "chalk";
-import { ILogger } from "./interfaces/logger.interface";
+import { ILogger } from "../../shared/interfaces/logger.interface";
+
 
 interface LoggerOptions {
     timestamp?: boolean;
