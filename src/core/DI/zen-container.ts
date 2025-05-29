@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { ZEN_PROVIDER_METADATA } from "../../constants";
 import { InstanceLoaderException } from "../exceptions/instance-loader.exception";
 import { LogInstancer } from "../../common/instancer-logger/instancer-logger";
+import { RegisterControllers } from "../handlers";
 
 type Constructor<T = any> = new (...args: any[]) => T;
 
@@ -33,7 +34,6 @@ export class ZenContainer {
     return this.providerToModule.get(provider);
   }
 
-
   static canInject(dep: Constructor, targetModule: string): boolean {
     const declaredModule = this.providerToModule.get(dep);
     if (!declaredModule) return false;
@@ -43,7 +43,7 @@ export class ZenContainer {
     return importedProviders?.has(dep) ?? false;
   }
 
-  static initialize() {
+  static initialize(app: any) {
     for (const [Provider] of this.providers) {
       if (!this.providers.get(Provider)) {
 
@@ -96,10 +96,9 @@ export class ZenContainer {
         this.controllers.set(Controller, new Controller(...dependencies));
       }
     }
+
+    RegisterControllers(app, Array.from(this.controllers.values()));
   }
 
-  static getController<T>(Controller: Constructor<T>): T {
-    return this.controllers.get(Controller);
-  }
 }
 

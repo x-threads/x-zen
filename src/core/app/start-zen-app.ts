@@ -1,10 +1,15 @@
 import "reflect-metadata";
-import chalk from "chalk";
 import { ZenContainer } from "../DI";
 import { ZEN_MODULE_METADATA } from "../../constants";
-import { RegisterControllers } from "../handlers/register-controller.handler";
 import { ZenModuleOptions } from "../../shared/interfaces/zen-module.interface";
 import { LogInstancer } from "../../common/instancer-logger/instancer-logger";
+
+
+export interface ZenApplicationResult {
+  modules: string[];
+  controllers: any[];
+  providers: any[];
+}
 
 /**
  * Starts the Zen application by resolving all modules, providers, and controllers.
@@ -13,7 +18,7 @@ import { LogInstancer } from "../../common/instancer-logger/instancer-logger";
  * @param app - The application instance (e.g., an Express app) to register controllers on.
  * @param rootModule - The root module of the Zen application.
  */
-export async function StartZenApplication(app: any, rootModule: any) {
+export async function StartZenApplication(app: any, rootModule: any): Promise<ZenApplicationResult> {
   const moduleQueue = [rootModule];
   const visitedModules = new Set();
 
@@ -38,14 +43,14 @@ export async function StartZenApplication(app: any, rootModule: any) {
     if (moduleMetadata.providers) {
       for (const provider of moduleMetadata.providers) {
         allProviders.push(provider);
-        ZenContainer.setProviderModule(provider, module.name); 
+        ZenContainer.setProviderModule(provider, module.name);
       }
     }
 
     if (moduleMetadata.controllers) {
       for (const controller of moduleMetadata.controllers) {
         allControllers.push(controller);
-        ZenContainer.setProviderModule(controller, module.name); // Asignar módulo a controlador
+        ZenContainer.setProviderModule(controller, module.name);
       }
     }
 
@@ -74,44 +79,14 @@ export async function StartZenApplication(app: any, rootModule: any) {
     ZenContainer.registerController(controller);
   }
 
-  ZenContainer.initialize();
+  ZenContainer.initialize(app);
 
-  const resolvedControllers = allControllers.map((controller) =>
-    ZenContainer.getController(controller)
-  );
-
-  RegisterControllers(app, resolvedControllers);
-
-  printDependencyGraph(allModules, allProviders, allControllers);
-}
-
-
-/**
- * Prints a dependency graph for providers and controllers in each module.
- */
-function printDependencyGraph(modules: string[], providers: any[], controllers: any[]) {
-  console.log(chalk.bold.green("\n[DI Graph]"));
-
-  for (const module of modules) {
-    console.log(chalk.cyan(`Module: ${module}`));
-
-    const moduleProviders = providers.filter(p => ZenContainer.getProviderModule(p) === module);
-    const moduleControllers = controllers.filter(c => ZenContainer.getProviderModule(c) === module);
-
-    for (const provider of moduleProviders) {
-      console.log(`  ├─ ${chalk.yellow("Provider")}: ${provider.name}`);
-      const deps = Reflect.getMetadata("design:paramtypes", provider) || [];
-      if (deps.length > 0) {
-        console.log(`  │    └─ Depends on: ${deps.map((d: any) => d.name).join(", ")}`);
-      }
-    }
-
-    for (const controller of moduleControllers) {
-      console.log(`  └─ ${chalk.magenta("Controller")}: ${controller.name}`);
-      const deps = Reflect.getMetadata("design:paramtypes", controller) || [];
-      if (deps.length > 0) {
-        console.log(`       └─ Depends on: ${deps.map((d: any) => d.name).join(", ")}`);
-      }
-    }
+  return {
+    modules: allModules,
+    controllers: allControllers,
+    providers: allProviders
   }
 }
+
+
+
