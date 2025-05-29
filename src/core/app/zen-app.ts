@@ -1,6 +1,6 @@
 import { printDependencyGraph } from "../../common/graph-printer/grahp-printer";
 import { IZenApp } from "../../shared/interfaces/zen-app.interface";
-import { ZenContainer } from "../DI";
+import { StartZenApplication } from "./start-zen-app";
 
 
 /**
@@ -16,19 +16,23 @@ import { ZenContainer } from "../DI";
  */
 export class ZenApplication implements IZenApp {
     private app: any;
+    private rootModule: any;
     private modules: string[] = [];
     private providers: any[] = [];
     private controllers: any[] = [];
 
-    constructor(app: any) {
+    constructor(app: any, rootModule: any) {
         this.app = app;
-     }
-
-    async start(): Promise<void> {
-        ZenContainer.initialize(this.app);
+        this.rootModule = rootModule;
     }
 
-    setInstancers(modules: string[], providers: any[], controllers: any[]): void {
+    /**
+     * Initializes and starts the Zen application using the provided app instance and root module.
+     *
+     * @returns {Promise<void>} A promise that resolves when the application has started.
+     */
+    async start(): Promise<void> {
+        const { modules, providers, controllers } = await StartZenApplication(this.app, this.rootModule);
         this.modules = modules;
         this.providers = providers;
         this.controllers = controllers;
@@ -38,7 +42,7 @@ export class ZenApplication implements IZenApp {
      * Displays the dependency graph of the application, showing modules, providers, and controllers.
      * This method uses the `printDependencyGraph` function to visualize the relationships.
      */
-    showDependencyGraph(): void {
+    showAppGraph(): void {
         printDependencyGraph(this.modules, this.providers, this.controllers);
     }
 }

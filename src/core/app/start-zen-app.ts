@@ -3,7 +3,13 @@ import { ZenContainer } from "../DI";
 import { ZEN_MODULE_METADATA } from "../../constants";
 import { ZenModuleOptions } from "../../shared/interfaces/zen-module.interface";
 import { LogInstancer } from "../../common/instancer-logger/instancer-logger";
-import { ZenApplication } from "./zen-app";
+
+
+export interface ZenApplicationResult {
+  modules: string[];
+  controllers: any[];
+  providers: any[];
+}
 
 /**
  * Starts the Zen application by resolving all modules, providers, and controllers.
@@ -12,7 +18,7 @@ import { ZenApplication } from "./zen-app";
  * @param app - The application instance (e.g., an Express app) to register controllers on.
  * @param rootModule - The root module of the Zen application.
  */
-export async function StartZenApplication(app: any, rootModule: any): Promise<ZenApplication> {
+export async function StartZenApplication(app: any, rootModule: any): Promise<ZenApplicationResult> {
   const moduleQueue = [rootModule];
   const visitedModules = new Set();
 
@@ -73,11 +79,13 @@ export async function StartZenApplication(app: any, rootModule: any): Promise<Ze
     ZenContainer.registerController(controller);
   }
 
-  const zenApp = new ZenApplication(app);
-  zenApp.setInstancers(allModules, allProviders, allControllers);
-  await zenApp.start();
+  ZenContainer.initialize(app);
 
-  return zenApp;
+  return {
+    modules: allModules,
+    controllers: allControllers,
+    providers: allProviders
+  }
 }
 
 

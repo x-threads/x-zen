@@ -1,1 +1,1 @@
-export * from './start-zen-app'
+export * from './zen-app'
