@@ -8,8 +8,7 @@
     "build": "tsc",
     "test": "jest --config jest.config.ts",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "deploy": "git add . && git commit -m 'chore: Release new version' && git push origin andresdvx && npm run build && npm publish --access public"
+    "test:coverage": "jest --coverage"
   },
   "keywords": [
     "express",
