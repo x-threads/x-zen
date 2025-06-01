@@ -1,6 +1,6 @@
 {
   "exclude": ["node_modules"],
-  "include": ["src/**/*", "src/http", "tests/DI/zen-container.test.ts"],
+  "include": ["src/**/*", "src/http", "tests/DI/zen-container.test.ts", "tests/app/zen-app.test.ts"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
