@@ -41,11 +41,10 @@ describe('ZenApplication', () => {
 
         await zenApp.start();
 
-        // @ts-ignore: access private for test
         expect(zenApp['modules']).toEqual(mockModules);
-        // @ts-ignore: access private for test
+
         expect(zenApp['providers']).toEqual(mockProviders);
-        // @ts-ignore: access private for test
+
         expect(zenApp['controllers']).toEqual(mockControllers);
     });
 
@@ -58,11 +57,10 @@ describe('ZenApplication', () => {
 
         await zenApp.start();
 
-        // @ts-ignore: access private for test
         expect(zenApp['modules']).toEqual([]);
-        // @ts-ignore: access private for test
+
         expect(zenApp['providers']).toEqual([]);
-        // @ts-ignore: access private for test
+
         expect(zenApp['controllers']).toEqual([]);
     });
 });
