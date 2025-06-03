@@ -16,7 +16,8 @@ export interface ZenApplicationResult {
  * It initializes the ZenContainer and registers all controllers with the provided app instance.
  *
  * @param app - The application instance (e.g., an Express app) to register controllers on.
- * @param rootModule - The root module of the Zen application.
+ * @param rootModule - The root module of the Zen application..+
+ * 
  */
 export async function StartZenApplication(app: any, rootModule: any): Promise<ZenApplicationResult> {
   const moduleQueue = [rootModule];
