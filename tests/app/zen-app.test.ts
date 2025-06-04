@@ -63,3 +63,4 @@ describe("ZenApplication", () => {
     expect(zenApp["controllers"]).toEqual([]);
   });
 });
+
