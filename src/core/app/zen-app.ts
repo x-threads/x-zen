@@ -7,12 +7,9 @@ import { StartZenApplication } from "./start-zen-app";
  * Represents the main application class for the Zen framework.
  * 
  * `ZenApplication` is responsible for managing the core lifecycle of the application,
- * including initialization, dependency injection, and displaying the dependency graph.
+ * including initialization, dependency injection, etc.
  * 
- * @implements {IZenApp}
- * 
- * @example
- * app.showDependencyGraph();
+ * @implements {IZenApp} interface
  */
 export class ZenApplication implements IZenApp {
     private app: any;

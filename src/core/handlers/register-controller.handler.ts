@@ -1,14 +1,11 @@
 import chalk from "chalk";
 import { ZEN_CONTROLLER_BASE_PATH_METADATA, ZEN_CONTROLLER_ROUTES_METADATA, ZEN_MIDDLEWARE_METADATA } from '../../constants'
+
 /**
- * Registers controller routes with the provided application instance.
- *
- * Iterates over an array of controller instances, retrieves their metadata for base paths and routes,
- * and binds each route handler to the application using the specified HTTP method and path.
- * Logs registration details for each controller and route.
- *
- * @param app - The application instance (e.g., an Express app) to register routes on.
- * @param controllers - An array of controller instances containing route metadata by RestController decorator.
+ * Registers controllers with their routes and middlewares to the provided application instance.
+ * 
+ * @param {any} app - The application instance (e.g., Express app).
+ * @param {any[]} controllers - An array of controller instances to register.
  */
 export function RegisterControllers(app: any, controllers: any[]) {
   const log = console.log;

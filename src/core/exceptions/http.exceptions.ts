@@ -83,3 +83,46 @@ export class ForbiddenError extends HttpErrors {
     super(403, errorMessage, 'Forbidden');
   }
 }
+
+/**
+ * Throws new Not Implemented Error - Represents a 501 HTTP error
+ * 
+ * This error is thrown to indicate that a requested HTTP operation is not implemented.
+ *
+ * @param {string} errorMessage - Optional custom error message. Defaults to 'Not Implemented Error'.
+ */
+export class NotImplementedError extends HttpErrors {
+  constructor(errorMessage = 'Not Implemented Error') {
+    super(501, errorMessage, 'Not Implemented');
+  }
+}
+
+/**
+ * Throws new Bad Gateway error - Representes a 502 HTTP error.
+ * 
+ * This exception should be thrown when a server acting as a gateway or proxy
+ * receives an invalid response from the upstream server.
+ *
+ * @param {string} errorMessage - Optional custom error message. Defaults to 'Bad Gateway Error'.
+ */
+export class BadGatewayError extends HttpErrors {
+  constructor(errorMessage = 'Bad Gateway Error') {
+    super(502, errorMessage, 'Bad Gateway');
+  }
+}
+
+/**
+ * Throws new Service Unavailable Error - Represents a 503 HTTP error.
+ * 
+ * Thrown when a service is temporarily unavailable, typically due to maintenance or overload.
+ *
+ * @example
+ * throw new ServiceUnavailableError('Database is down for maintenance');
+ *
+ * @param errorMessage - Optional custom error message. Defaults to 'Service Unavailable Error'.
+ */
+export class ServiceUnavailableError extends HttpErrors {
+  constructor(errorMessage = 'Service Unavailable Error') {
+    super(503, errorMessage, 'Service Unavailable');
+  }
+}
