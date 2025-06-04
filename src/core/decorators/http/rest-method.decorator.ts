@@ -12,17 +12,6 @@ interface IRestMethodOptions {
  * @param options - An object containing options for the response method.
  * @param options.statusCode - The status code to be sent in the response. Defaults to 200.
  * @param options.message - The message to be sent in the response. Defaults to "success".
- * 
- * 
- * @example
- * ```typescript
- * class MyController {
- *   @RestMethod({ statusCode: 201, message: "Created successfully" })
- *   async createResource(req: Request, res: Response) {
- *     // method implementation
- *   }
- * }
- * ```
  */
 export function RestMethod(options : IRestMethodOptions = {}) {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {

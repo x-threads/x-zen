@@ -1,5 +1,4 @@
 import 'reflect-metadata';
-import { ZenContainer } from '../../DI/zen-container';
 import { ZEN_PROVIDER_METADATA } from '../../../constants';
 
 export function ZenProvider() {
