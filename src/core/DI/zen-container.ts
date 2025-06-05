@@ -13,11 +13,11 @@ export class ZenContainer {
   private static providerToModule = new Map<Constructor, string>();
 
   static registerProvider(provider: Constructor) {
-    this.providers.set(provider, null);
+    this.providers.set(provider, undefined);
   }
 
   static registerController(controller: Constructor) {
-    this.controllers.set(controller, null);
+    this.controllers.set(controller, undefined);
   }
 
   static registerModuleProvider(
@@ -46,63 +46,61 @@ export class ZenContainer {
     return importedProviders?.has(dep) ?? false;
   }
 
+  private static instantiateDependency(dep: Constructor, targetModule: string) {
+    if (!this.canInject(dep, targetModule)) {
+      throw new InstanceLoaderException(
+        `
+        Dependence ${dep.name} cannot be injected into ${targetModule}. 
+        Make sure it is declared in the providers array of ${targetModule} module or in an imported module.
+        Ensure it is decorated with @ZenProvider().`
+      );
+    }
+
+    let instance = this.providers.get(dep);
+
+    if (instance === undefined) {
+      const isZenProvider = Reflect.getMetadata(ZEN_PROVIDER_METADATA, dep);
+      if (!isZenProvider) {
+        throw new InstanceLoaderException(
+          `
+          Dependence ${dep.name} is not decorated with @ZenProvider(). 
+          Please add @ZenProvider() to ${dep.name} to use it as a dependency.`
+        );
+      }
+
+      const paramTypes: Constructor[] = Reflect.getMetadata("design:paramtypes", dep) || [];
+      const deps = paramTypes.map((d) => this.instantiateDependency(d, targetModule));
+
+      instance = new dep(...deps);
+      this.providers.set(dep, instance);
+      LogInstancer("ZenProvider", dep);
+    }
+
+    return instance;
+  }
+
   static initialize(app: any) {
     for (const [Provider] of this.providers) {
-      if (!this.providers.get(Provider)) {
-        const isZenProvider: boolean = Reflect.getMetadata(
-          ZEN_PROVIDER_METADATA,
-          Provider
+      if (this.providers.get(Provider) === undefined) {
+        const paramTypes: Constructor[] = Reflect.getMetadata("design:paramtypes", Provider) || [];
+        const providerModule = this.providerToModule.get(Provider)!;
+
+        const dependencies = paramTypes.map(dep =>
+          this.instantiateDependency(dep, providerModule)
         );
 
-        if (!isZenProvider) {
-          throw new InstanceLoaderException(
-            `Error when instantiating provider ${Provider.name}. Make sure it is decorated with @ZenProvider() decorator`
-          );
-        }
-
-        const paramTypes: Constructor[] =
-          Reflect.getMetadata("design:paramtypes", Provider) || [];
-        const providerModule = this.providerToModule.get(Provider);
-
-        const dependencies = paramTypes.map((dep) => {
-          if (!this.canInject(dep, providerModule!)) {
-            throw new InstanceLoaderException(
-              `
-                Dependence ${dep.name} cannot be injected into ${Provider.name}. 
-                Make sure it is declared in the providers array of ${providerModule} module or in the providers array of imported module 
-                Import in the ${providerModule} module the module where ${dep.name} is declared
-                Make sure ${dep.name} is decorated with @ZenProvider() decorator`
-            );
-          }
-
-          const instance = this.providers.get(dep) === null ? new dep() : this.providers.get(dep);
-
-
-          if (!instance) {
-            throw new InstanceLoaderException(
-              `
-                Dependence ${dep.name} cannot be injected into ${Provider.name}. 
-                Make sure it is declared in the providers array of ${providerModule} module or in the providers array of imported module 
-                Import in the ${providerModule} module the module where ${dep.name} is declared
-                Make sure ${dep.name} is decorated with @ZenProvider() decorator`
-            );
-          }
-
-          return instance;
-        });
-        this.providers.set(Provider, new Provider(...dependencies));
+        const instance = new Provider(...dependencies);
+        this.providers.set(Provider, instance);
         LogInstancer("ZenProvider", Provider);
       }
     }
 
     for (const [Controller] of this.controllers) {
-      if (!this.controllers.get(Controller)) {
-        const paramTypes: Constructor[] =
-          Reflect.getMetadata("design:paramtypes", Controller) || [];
-        const dependencies = paramTypes.map(
-          (dep) => this.providers.get(dep) || null
-        );
-        this.controllers.set(Controller, new Controller(...dependencies));
+      if (this.controllers.get(Controller) === undefined) {
+        const paramTypes: Constructor[] = Reflect.getMetadata("design:paramtypes", Controller) || [];
+        const dependencies = paramTypes.map((dep) => this.providers.get(dep));
+        const instance = new Controller(...dependencies);
+        this.controllers.set(Controller, instance);
       }
     }
 

@@ -58,7 +58,7 @@ export function RegisterControllers(app: any, controllers: any[]) {
       const handler = async (req: any, res: any)=>{
         try{
           const result = await controllerInstance[route.methodName].apply(controllerInstance, [req, res]);
-          ResponseHandler(res, { statusCode: 200, message: "success", data: result });
+          ResponseHandler(res, { statusCode: route.statusCode ?? 200, message: route.message ?? "success", data: result });
         }catch(error){
           ErrorHandler(error, res);
         }
