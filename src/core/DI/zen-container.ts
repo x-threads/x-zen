@@ -45,6 +45,7 @@ export class ZenContainer {
 
   static initialize(app: any) {
     for (const [Provider] of this.providers) {
+      
       if (!this.providers.get(Provider)) {
 
         const isZenProvider: boolean = Reflect.getMetadata(ZEN_PROVIDER_METADATA, Provider);
@@ -55,10 +56,15 @@ export class ZenContainer {
           );
         }
 
+        console.log('is zen provider', Provider.name);
+
         const paramTypes: Constructor[] = Reflect.getMetadata("design:paramtypes", Provider) || [];
         const providerModule = this.providerToModule.get(Provider);
 
+        console.log('paramtypes: ', paramTypes, '->', providerModule);
+
         const dependencies = paramTypes.map((dep) => {
+
           if (!this.canInject(dep, providerModule!)) {
             throw new InstanceLoaderException(
               `
@@ -83,7 +89,7 @@ export class ZenContainer {
 
           return instance;
         });
-
+        console.log('dependencies: ', dependencies);
         this.providers.set(Provider, new Provider(...dependencies));
         LogInstancer("ZenProvider", Provider);
       }

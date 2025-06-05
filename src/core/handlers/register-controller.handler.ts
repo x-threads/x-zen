@@ -53,10 +53,19 @@ export function RegisterControllers(app: any, controllers: any[]) {
 
       const combinedMiddlewares = [...classMiddlewares, ...methodMiddlewares];
 
+      const handler = async (req: any, res: any)=>{
+        try{
+          const result = await controllerInstance[route.methodName].apply(controllerInstance, [req, res]);
+          console.log(chalk.green(`Response from ${route.methodName}:`), result);
+        }catch(error){
+          console.error(chalk.red(`Error in route ${route.methodName}:`), error);
+        }
+      }
+
       app[route.method](
         fullPath,
         ...combinedMiddlewares,
-        controllerInstance[route.methodName].bind(controllerInstance)
+        handler
       );
 
       log(
