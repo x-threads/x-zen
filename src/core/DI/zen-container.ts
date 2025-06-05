@@ -20,9 +20,12 @@ export class ZenContainer {
     this.controllers.set(controller, null);
   }
 
-  static registerModuleProvider(moduleName: string, providers: Constructor[] = []) {
+  static registerModuleProvider(
+    moduleName: string,
+    providers: Constructor[] = []
+  ) {
     const existing = this.moduleProviders.get(moduleName) || new Set();
-    providers.forEach(p => existing.add(p));
+    providers.forEach((p) => existing.add(p));
     this.moduleProviders.set(moduleName, existing);
   }
 
@@ -45,10 +48,11 @@ export class ZenContainer {
 
   static initialize(app: any) {
     for (const [Provider] of this.providers) {
-      
       if (!this.providers.get(Provider)) {
-
-        const isZenProvider: boolean = Reflect.getMetadata(ZEN_PROVIDER_METADATA, Provider);
+        const isZenProvider: boolean = Reflect.getMetadata(
+          ZEN_PROVIDER_METADATA,
+          Provider
+        );
 
         if (!isZenProvider) {
           throw new InstanceLoaderException(
@@ -56,15 +60,11 @@ export class ZenContainer {
           );
         }
 
-        console.log('is zen provider', Provider.name);
-
-        const paramTypes: Constructor[] = Reflect.getMetadata("design:paramtypes", Provider) || [];
+        const paramTypes: Constructor[] =
+          Reflect.getMetadata("design:paramtypes", Provider) || [];
         const providerModule = this.providerToModule.get(Provider);
 
-        console.log('paramtypes: ', paramTypes, '->', providerModule);
-
         const dependencies = paramTypes.map((dep) => {
-
           if (!this.canInject(dep, providerModule!)) {
             throw new InstanceLoaderException(
               `
@@ -75,7 +75,8 @@ export class ZenContainer {
             );
           }
 
-          const instance = this.providers.get(dep);
+          const instance = this.providers.get(dep) === null ? new dep() : this.providers.get(dep);
+
 
           if (!instance) {
             throw new InstanceLoaderException(
@@ -89,7 +90,6 @@ export class ZenContainer {
 
           return instance;
         });
-        console.log('dependencies: ', dependencies);
         this.providers.set(Provider, new Provider(...dependencies));
         LogInstancer("ZenProvider", Provider);
       }
@@ -97,14 +97,15 @@ export class ZenContainer {
 
     for (const [Controller] of this.controllers) {
       if (!this.controllers.get(Controller)) {
-        const paramTypes: Constructor[] = Reflect.getMetadata("design:paramtypes", Controller) || [];
-        const dependencies = paramTypes.map((dep) => this.providers.get(dep) || null);
+        const paramTypes: Constructor[] =
+          Reflect.getMetadata("design:paramtypes", Controller) || [];
+        const dependencies = paramTypes.map(
+          (dep) => this.providers.get(dep) || null
+        );
         this.controllers.set(Controller, new Controller(...dependencies));
       }
     }
 
     RegisterControllers(app, Array.from(this.controllers.values()));
   }
-
 }
-

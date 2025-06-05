@@ -1,5 +1,7 @@
 import chalk from "chalk";
 import { ZEN_CONTROLLER_BASE_PATH_METADATA, ZEN_CONTROLLER_ROUTES_METADATA, ZEN_MIDDLEWARE_METADATA } from '../../constants'
+import { ResponseHandler } from "./response.handler";
+import { ErrorHandler } from "./error.handler";
 
 /**
  * Registers controllers with their routes and middlewares to the provided application instance.
@@ -56,9 +58,9 @@ export function RegisterControllers(app: any, controllers: any[]) {
       const handler = async (req: any, res: any)=>{
         try{
           const result = await controllerInstance[route.methodName].apply(controllerInstance, [req, res]);
-          console.log(chalk.green(`Response from ${route.methodName}:`), result);
+          ResponseHandler(res, { statusCode: 200, message: "success", data: result });
         }catch(error){
-          console.error(chalk.red(`Error in route ${route.methodName}:`), error);
+          ErrorHandler(error, res);
         }
       }
 
