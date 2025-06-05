@@ -1,9 +1,14 @@
 import 'reflect-metadata';
 import { ZEN_CONTROLLER_ROUTES_METADATA } from '../../../constants';
 
-interface RouterOptions {
+interface RouterOptions extends RouteOptions {
   method: 'get' | 'post' | 'put' | 'delete' | 'patch';
+}
+
+interface RouteOptions {
   path: string;
+  statusCode?: number | string;
+  message?: string;
 }
 
 export function Router(options: RouterOptions) {
@@ -22,29 +27,29 @@ export function Router(options: RouterOptions) {
  * Decorator for defining an HTTP GET route handler.
  * @param path - The route path to handle GET requests for.
  */
-export const Get = (path: string) => Router({ method: 'get', path });
+export const Get = (options: RouteOptions) => Router({ method: 'get', ...options });
 
 
 /**
  * Decorator for defining an HTTP POST route on a controller method.
  * @param path - The route path for the POST request.
  */
-export const Post = (path: string) => Router({ method: 'post', path });
+export const Post = (options: RouteOptions) => Router({ method: 'post', ...options });
 
 /**
  * Decorator for defining an HTTP PUT route handler.
  * @param path - The route path for which this handler should be registered.
  */
-export const Put = (path: string) => Router({ method: 'put', path });
+export const Put = (options: RouteOptions) => Router({ method: 'put', ...options });
 
 /**
  * Decorator to define a route handler for HTTP DELETE requests.
  * @param path - The route path to associate with the DELETE handler.
  */
-export const Delete = (path: string) => Router({ method: 'delete', path });
+export const Delete = (options: RouteOptions) => Router({ method: 'delete', ...options });
 
 /**
  * Decorator that marks a method as an HTTP PATCH route handler for the specified path.
  * @param path - The route path to associate with this PATCH handler.
  */
-export const Patch = (path: string) => Router({ method: 'patch', path });
+export const Patch = (options: RouteOptions) => Router({ method: 'patch', ...options });
