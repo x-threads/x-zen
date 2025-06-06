@@ -83,15 +83,6 @@ describe("ZenContainer", () => {
       Reflect.defineMetadata("design:paramtypes", [Provider], Controller);
     });
 
-    it("throws if provider is not decorated with @ZenProvider", () => {
-      ZenContainer.registerProvider(Dep);
-      Reflect.defineMetadata(ZEN_PROVIDER_METADATA, undefined, Dep);
-      ZenContainer.setProviderModule(Dep, "TestModule");
-      expect(() => ZenContainer.initialize({})).toThrow(
-        InstanceLoaderException
-      );
-    });
-
     it("throws if dependency cannot be injected", () => {
       ZenContainer.registerProvider(Provider);
       ZenContainer.setProviderModule(Provider, "TestModule");
@@ -142,6 +133,18 @@ describe("ZenContainer", () => {
       expect(RegisterControllers).toHaveBeenCalledWith(app, [
         controllerInstance,
       ]);
+    });
+  });
+
+  describe("instantiateDependency", () => {
+    it("throws if provider is not decorated with @ZenProvider", () => {
+      class NotZenProvider {} 
+      ZenContainer.setProviderModule(NotZenProvider, "AnyModule");
+      ZenContainer.registerProvider(NotZenProvider);
+      ZenContainer.initialize({});
+      expect(() =>
+        ZenContainer.instantiateDependency(NotZenProvider, "AnotherModule")
+      ).toThrow(InstanceLoaderException);
     });
   });
 });
