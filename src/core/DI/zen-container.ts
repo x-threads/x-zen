@@ -180,7 +180,7 @@ export class ZenContainer {
       // ===== VALIDACIÓN DE DECORADOR =====
       // Verifica que la clase tenga el decorador @ZenProvider
       const isZenProvider = Reflect.getMetadata(ZEN_PROVIDER_METADATA, dep);
-
+      
       if (!isZenProvider) {
         throw new InstanceLoaderException(
           `
