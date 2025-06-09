@@ -1,5 +1,5 @@
 {
-  "exclude": ["node_modules", "tests", "coverage"],
+  "exclude": ["node_modules", "tests", "coverage", "docs"],
   "include": ["src/**/*"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
